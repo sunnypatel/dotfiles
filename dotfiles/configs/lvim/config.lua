@@ -47,13 +47,9 @@ lvim.plugins = {
     config = function()
       require("auto-session").setup {
         log_level = "error",
-<<<<<<< Updated upstream
         auto_session_suppress_dirs = { "~/", "~/Documents", "~/Downloads", "/" },
         auto_save_enabled = true,
         auto_restore_enabled = true
-=======
-        auto_session_suppress_dirs = { vim.fn.expand("~"), "/tmp", "/" },
->>>>>>> Stashed changes
       }
     end
   },
@@ -91,7 +87,6 @@ formatters.setup {
 }
 
 local linters = require "lvim.lsp.null-ls.linters"
-<<<<<<< Updated upstream
 linters.setup {
   {
     name = "shellcheck",
@@ -105,24 +100,6 @@ code_actions.setup {
   --   name = "proselint",
   -- },
 }
-=======
-linters.setup {}
-
-local code_actions = require "lvim.lsp.null-ls.code_actions"
-code_actions.setup {}
-
-lvim.builtin.alpha.active = false
-lvim.builtin.terminal.active = false
-
-vim.api.nvim_create_autocmd("BufReadPre", {
-  pattern = "*",
-  callback = function()
-    if vim.fn.getfsize(vim.fn.expand("%")) > 1024 * 1024 then
-      vim.cmd("colorscheme default")
-    end
-  end,
-})
->>>>>>> Stashed changes
 
 -- Auto change to current directory
 -- vim.opt.autochdir = true

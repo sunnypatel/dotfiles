@@ -3,10 +3,12 @@
 cd "$(dirname "$0")"
 SCRIPT_DIR="$(pwd)"
 
-ALACRITTY_CONF_PATH=$HOME/.config/alacritty
-LVIM_CONF_PATH=$HOME/.config/lvim
-PAYPAL_CONF_PATH=$HOME/.config/paypal
+# Source paths
+ALACRITTY_CONF_PATH=$HOME/configs/alacritty
+LVIM_CONF_PATH=$HOME/configs/lvim
+PAYPAL_CONF_PATH=$HOME/configs/paypal
 
+# Destination paths
 ZSHRC=$HOME/.zshrc
 TMUX_CONF=$HOME/.tmux.conf
 TMUX_CONF_LOCAL=$HOME/.tmux.conf.local
