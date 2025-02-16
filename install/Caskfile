@@ -1,11 +1,13 @@
 cask "firefox"
 cask "font-fira-code"
 cask "font-hack"
+cask "font-mononoki-nerd-font"
 cask "fork"
 cask "google-chrome"
 cask "alfred"
 cask "visual-studio-code"
 cask "alacritty"
+
 
 # cask "google-chrome@canary"
 # cask "maccy"
