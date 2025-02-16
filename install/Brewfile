@@ -49,3 +49,7 @@ brew "webp"
 
 # misc
 brew "grip"
+
+# zsh
+brew "zsh"
+brew "zimfw"
