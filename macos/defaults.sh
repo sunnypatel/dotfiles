@@ -1,7 +1,7 @@
-COMPUTER_NAME="Neo"
-LANGUAGES=(en nl)
-LOCALE="en_US@currency=EUR"
-MEASUREMENT_UNITS="Centimeters"
+COMPUTER_NAME="Sunny's MacBook Pro"
+LANGUAGES=(en us)
+LOCALE="en_US@currency=USD"
+MEASUREMENT_UNITS="Inches"
 SCREENSHOTS_FOLDER="${HOME}/Screenshots"
 
 # Topics
