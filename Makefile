@@ -37,7 +37,7 @@ ifndef GITHUB_ACTION
 	while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 endif
 
-packages: brew-packages cask-apps node-packages rust-packages
+packages: brew-packages cask-apps node-packages rust-packages java-setup
 
 link: stow-$(OS)
 	for FILE in $$(\ls -A runcom); do if [ -f $(HOME)/$$FILE -a ! -h $(HOME)/$$FILE ]; then \
@@ -92,6 +92,9 @@ node-packages: npm
 
 rust-packages: brew-packages
 	cargo install $(shell cat install/Rustfile)
+
+java: brew-packages
+	[ -d $(HOMEBREW_PREFIX)/opt/openjdk ] && sudo ln -sfn $(HOMEBREW_PREFIX)/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk || true
 
 duti:
 	duti -v $(DOTFILES_DIR)/install/duti

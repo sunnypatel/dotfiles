@@ -40,6 +40,7 @@ brew "python"
 brew "ruby"
 brew "rust"
 brew "shellcheck"
+brew "openjdk"
 
 # media
 brew "ffmpeg"
