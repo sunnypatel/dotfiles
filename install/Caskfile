@@ -5,7 +5,8 @@ cask "font-mononoki-nerd-font"
 cask "fork"
 cask "google-chrome"
 cask "alfred"
-cask "visual-studio-code"
+#cask "visual-studio-code"
+cask "cursor"
 cask "alacritty"
 
 
