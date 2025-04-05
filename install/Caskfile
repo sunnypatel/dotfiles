@@ -8,6 +8,7 @@ cask "alfred"
 #cask "visual-studio-code"
 cask "cursor"
 cask "alacritty"
+cask "cleanshot"
 
 
 # cask "google-chrome@canary"
