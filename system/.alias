@@ -1,0 +1,71 @@
+# Shortcuts
+
+alias reload="source ~/.bash_profile"
+alias _="sudo"
+alias g="git"
+alias rr="rm -rf"
+alias mux="tmuxinator"
+
+# Default options
+
+alias rsync="rsync -vh"
+alias json="json -c"
+alias psgrep="psgrep -i"
+
+# Global aliases
+
+if $(is-supported "alias -g"); then
+  alias -g G="| grep -i"
+  alias -g H="| head"
+  alias -g T="| tail"
+  alias -g L="| less"
+fi
+
+# List declared aliases, functions, paths
+
+alias aliases="alias | sed 's/=.*//'"
+alias functions="declare -f | grep '^[a-z].* ()' | sed 's/{$//'"
+alias paths='echo -e ${PATH//:/\\n}'
+
+# Directory listing/traversal
+
+LS_COLORIZED=$(is-supported "ls --color" --color -G)
+LS_TIMESTYLEISO=$(is-supported "ls --time-style=long-iso" --time-style=long-iso)
+LS_GROUPDIRSFIRST=$(is-supported "ls --group-directories-first" --group-directories-first)
+
+alias l="ls -lahA $LS_COLORIZED $LS_TIMESTYLEISO $LS_GROUPDIRSFIRST"
+alias ll="ls -lA $LS_COLORIZED"
+alias lt="ls -lhAtr $LS_COLORIZED $LS_TIMESTYLEISO $LS_GROUPDIRSFIRST"
+alias ld="ls -ld $LS_COLORIZED */"
+alias lp="stat -c '%a %n' *"
+
+unset LS_COLORIZED LS_TIMESTYLEISO LS_GROUPDIRSFIRST
+
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias -- -="cd -"                  # Go to previous dir with -
+alias cd.='cd $(readlink -f .)'    # Go to real dir (i.e. if current dir is linked)
+
+# p/npm
+
+alias b="bun"
+alias p="pnpm"
+alias ncu="npm-check-updates --interactive"
+alias ncuw="npm-check-updates --interactive --root --workspaces"
+
+# Network
+
+alias ip="curl -s ipinfo.io | jq -r '.ip'"
+alias ipl="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'"
+
+# Miscellaneous
+
+alias hosts="sudo $EDITOR /etc/hosts"
+alias quit="exit"
+alias week="date +%V"
+alias speedtest="wget -O /dev/null http://speed.transip.nl/100mb.bin"
+alias grip="grip --browser --pass=$GITHUB_TOKEN"
+alias fkill="ps -e | fzf | awk '{print $1}' | xargs kill"
+alias formatmd="remark --use remark-preset-webpro"

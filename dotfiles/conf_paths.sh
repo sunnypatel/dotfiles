@@ -3,14 +3,14 @@
 cd "$(dirname "$0")"
 SCRIPT_DIR="$(pwd)"
 
-# Source paths
-ALACRITTY_CONF_PATH=$HOME/configs/alacritty
-LVIM_CONF_PATH=$HOME/configs/lvim
-PAYPAL_CONF_PATH=$HOME/configs/paypal
+HOME_CONFIG_DIR=$HOME/.config
 
-# Destination paths
-ZSHRC=$HOME/.zshrc
-TMUX_CONF=$HOME/.tmux.conf
-TMUX_CONF_LOCAL=$HOME/.tmux.conf.local
-GITHUB_CONFIG=$HOME/.gitconfig
-ALACRITTY_CONF=$ALACRITTY_CONF_PATH/alacritty.yml
+ALACRITTY_CONFIG_DEST_DIR=$HOME_CONFIG_DIR/alacritty
+LVIM_CONFIG_DEST_DIR=$HOME_CONFIG_DIR/lvim
+PAYPAL_CONFIG_DEST_DIR=$HOME_CONFIG_DIR/paypal
+
+ZSHRC_DEST_PATH=$HOME/.zshrc
+TMUX_CONF_DEST_PATH=$HOME/.tmux.conf
+TMUX_CONF_LOCAL_DEST_PATH=$HOME/.tmux.conf.local
+GITHUB_CONFIG_DEST_PATH=$HOME/.gitconfig
+ALACRITTY_DEST_PATH=$ALACRITTY_CONFIG_DEST_DIR/alacritty.yml
