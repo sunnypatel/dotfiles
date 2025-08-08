@@ -1,1 +1,1 @@
-eval $(thefuck --alias fix)
+# eval $(thefuck --alias fix)  # Disabled due to Python 3.12 compatibility issues
