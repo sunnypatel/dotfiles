@@ -4,6 +4,11 @@ BIN_NAME=$(basename "$0")
 COMMAND_NAME=$1
 SUB_COMMAND_NAME=$2
 
+# Ensure DOTFILES_DIR is set (fall back to script location)
+if [ -z "$DOTFILES_DIR" ]; then
+  DOTFILES_DIR="$(cd "$(dirname "$0")"/.. && pwd)"
+fi
+
 sub_help () {
   echo "Usage: $BIN_NAME <command>"
   echo
@@ -39,7 +44,8 @@ sub_edit () {
 }
 
 sub_test () {
-  bats "$DOTFILES_DIR"/test/*.bats
+  # Prefer repository bin over system binaries (e.g., graphviz 'dot')
+  PATH="$DOTFILES_DIR/bin:$PATH" bats "$DOTFILES_DIR"/test/*.bats
 }
 
 sub_update () {

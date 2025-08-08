@@ -23,4 +23,12 @@ else
   echo "Installing dotfiles..."
   mkdir -p "$TARGET"
   eval "$CMD"
+  
+  # Run the appropriate installation based on OS
+  cd "$TARGET"
+  if [[ "$OSTYPE" =~ ^darwin ]]; then
+    make macos
+  else
+    make linux
+  fi
 fi

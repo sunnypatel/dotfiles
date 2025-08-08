@@ -2,15 +2,34 @@
 
 [ -z "$PS1" ] && return
 
-# Resolve DOTFILES_DIR (assuming ~/.dotfiles on distros without readlink and/or $BASH_SOURCE/$0)
-CURRENT_SCRIPT=$BASH_SOURCE
+# Resolve DOTFILES_DIR robustly
+if [ -z "$DOTFILES_DIR" ]; then
+  # Try to resolve from this file (follow symlinks)
+  if command -v readlink >/dev/null 2>&1; then
+    SCRIPT_SOURCE="${BASH_SOURCE[0]:-$0}"
+    RESOLVED=""
+    # Prefer GNU readlink -f when available
+    RESOLVED=$(readlink -f -- "$SCRIPT_SOURCE" 2>/dev/null) || RESOLVED=""
+    if [ -z "$RESOLVED" ]; then
+      # Fallback: manually resolve symlinks
+      RESOLVED="$SCRIPT_SOURCE"
+      while [ -L "$RESOLVED" ]; do
+        LINK_TARGET="$(readlink "$RESOLVED")"
+        case "$LINK_TARGET" in
+          /*) RESOLVED="$LINK_TARGET" ;;
+          *) RESOLVED="$(cd "$(dirname "$RESOLVED")" && cd "$(dirname "$LINK_TARGET")" && pwd)/$(basename "$LINK_TARGET")" ;;
+        esac
+      done
+    fi
+    DOTFILES_DIR="$(cd "$(dirname "$RESOLVED")/.." && pwd -P)"
+  fi
+fi
 
-if [[ -n $CURRENT_SCRIPT && -x readlink ]]; then
-  SCRIPT_PATH=$(readlink -n $CURRENT_SCRIPT)
-  DOTFILES_DIR="${PWD}/$(dirname $(dirname $SCRIPT_PATH))"
-elif [ -d "$HOME/.dotfiles" ]; then
+if [ -z "$DOTFILES_DIR" ] && [ -d "$HOME/.dotfiles" ]; then
   DOTFILES_DIR="$HOME/.dotfiles"
-else
+fi
+
+if [ -z "$DOTFILES_DIR" ] || [ ! -d "$DOTFILES_DIR" ]; then
   echo "Unable to find dotfiles, exiting."
   return
 fi
@@ -21,13 +40,13 @@ PATH="$DOTFILES_DIR/bin:$PATH"
 
 # Source the dotfiles (order matters)
 
-for DOTFILE in "$DOTFILES_DIR"/system/.{function,function_*,n,path,env,alias,fzf,grep,prompt,completion,fix,zoxide,java}; do
-  . "$DOTFILE"
+for DOTFILE in "$DOTFILES_DIR"/system/.{function,function_*,n,path,env,exports,alias,fzf,grep,prompt,completion,fix,zoxide}; do
+  [ -f "$DOTFILE" ] && . "$DOTFILE"
 done
 
 if is-macos; then
   for DOTFILE in "$DOTFILES_DIR"/system/.{env,alias,function}.macos; do
-    . "$DOTFILE"
+    [ -f "$DOTFILE" ] && . "$DOTFILE"
   done
 fi
 

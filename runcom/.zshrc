@@ -5,7 +5,11 @@
 ZIM_HOME=~/.zim
 # Install missing modules and update ${ZIM_HOME}/init.zsh if missing or outdated.
 if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZIM_CONFIG_FILE:-${ZDOTDIR:-${HOME}}/.zimrc} ]]; then
-  source ${HOMEBREW_PREFIX}/opt/zimfw/share/zimfw.zsh init -q
+  if [ -f ${HOMEBREW_PREFIX}/opt/zimfw/share/zimfw.zsh ]; then
+    source ${HOMEBREW_PREFIX}/opt/zimfw/share/zimfw.zsh init -q
+  elif [ -f /usr/share/zimfw/zimfw.zsh ]; then
+    source /usr/share/zimfw/zimfw.zsh init -q
+  fi
 fi
 
 # Initialize modules.
