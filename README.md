@@ -224,6 +224,50 @@ To customize the dotfiles to your likings, fork it and [be the king of your cast
 - `install/Rustfile` - Rust crates to install
 - `config/` - Application-specific configurations
 
+## Symlink Management
+
+This dotfiles project uses [GNU Stow](https://www.gnu.org/software/stow/) to manage symlinks between your configuration files and their expected locations.
+
+### How it Works
+
+The `make link` command (automatically run during installation) creates symlinks:
+- Files in `runcom/` are symlinked to your home directory (`~`)
+- Files in `config/` are symlinked to `~/.config/`
+
+For example:
+- `runcom/tmux.conf.local` → `~/.tmux.conf.local`
+- `config/git/config` → `~/.config/git/config`
+
+### Manual Symlink Commands
+
+To manually set up symlinks after adding new config files:
+
+```bash
+make link
+```
+
+This command will:
+1. Install GNU Stow if not already installed
+2. Backup any existing conflicting files (adds `.bak` extension)
+3. Create symlinks using stow for both `runcom/` and `config/` directories
+
+To remove all symlinks and restore backed up files:
+
+```bash
+make unlink
+```
+
+This will:
+1. Remove all symlinks created by stow
+2. Restore any `.bak` files to their original names
+
+### Adding New Configuration Files
+
+To add new dotfiles:
+1. Place files that belong in `~` in the `runcom/` directory
+2. Place files that belong in `~/.config/` in the `config/` directory
+3. Run `make link` to create the symlinks
+
 ## Credits
 
 Many thanks to the [dotfiles community](https://dotfiles.github.io) and the original [webpro/dotfiles](https://github.com/webpro/dotfiles) repository.

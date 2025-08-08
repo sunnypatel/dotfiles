@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
 
-# If not running interactively, don't do anything
-[ -z "$PS1" ] && return
-
-# Source the main bash profile
+# Source the main bash profile (which handles interactive check internally)
 . ~/.bash_profile

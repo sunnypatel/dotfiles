@@ -1,8 +1,4 @@
-# If not running interactively, don't do anything
-
-[ -z "$PS1" ] && return
-
-# Resolve DOTFILES_DIR robustly
+# Resolve DOTFILES_DIR robustly (always needed for PATH setup)
 if [ -z "$DOTFILES_DIR" ]; then
   # Try to resolve from this file (follow symlinks)
   if command -v readlink >/dev/null 2>&1; then
@@ -25,8 +21,12 @@ if [ -z "$DOTFILES_DIR" ]; then
   fi
 fi
 
-if [ -z "$DOTFILES_DIR" ] && [ -d "$HOME/.dotfiles" ]; then
-  DOTFILES_DIR="$HOME/.dotfiles"
+if [ -z "$DOTFILES_DIR" ]; then
+  if [ -d "$HOME/projects/dotfiles" ]; then
+    DOTFILES_DIR="$HOME/projects/dotfiles"
+  elif [ -d "$HOME/.dotfiles" ]; then
+    DOTFILES_DIR="$HOME/.dotfiles"
+  fi
 fi
 
 if [ -z "$DOTFILES_DIR" ] || [ ! -d "$DOTFILES_DIR" ]; then
@@ -38,9 +38,16 @@ fi
 
 PATH="$DOTFILES_DIR/bin:$PATH"
 
-# Source the dotfiles (order matters)
+# Source essential dotfiles (PATH, environment, functions - needed for all shells)
+for DOTFILE in "$DOTFILES_DIR"/system/.{function,function_*,n,path,env,exports}; do
+  [ -f "$DOTFILE" ] && . "$DOTFILE"
+done
 
-for DOTFILE in "$DOTFILES_DIR"/system/.{function,function_*,n,path,env,exports,alias,fzf,grep,prompt,completion,fix,zoxide}; do
+# If not running interactively, skip interactive features
+[ -z "$PS1" ] && export DOTFILES_DIR && return
+
+# Source interactive dotfiles (aliases, prompt, completion, etc.)
+for DOTFILE in "$DOTFILES_DIR"/system/.{alias,fzf,grep,prompt,completion,fix,zoxide}; do
   [ -f "$DOTFILE" ] && . "$DOTFILE"
 done
 
