@@ -39,9 +39,12 @@ fi
 PATH="$DOTFILES_DIR/bin:$PATH"
 
 # Source essential dotfiles (PATH, environment, functions - needed for all shells)
-for DOTFILE in "$DOTFILES_DIR"/system/.{function,function_*,n,path,env,exports}; do
+for DOTFILE in "$DOTFILES_DIR"/system/.{function,function_*,path,env,exports}; do
   [ -f "$DOTFILE" ] && . "$DOTFILE"
 done
+
+# Source nvm after PATH is set so nvm can add its paths
+[ -f "$DOTFILES_DIR/system/.nvm" ] && . "$DOTFILES_DIR/system/.nvm"
 
 # If not running interactively, skip interactive features
 [ -z "$PS1" ] && export DOTFILES_DIR && return
@@ -53,6 +56,10 @@ done
 
 if is-macos; then
   for DOTFILE in "$DOTFILES_DIR"/system/.{env,alias,function}.macos; do
+    [ -f "$DOTFILE" ] && . "$DOTFILE"
+  done
+elif is-wsl; then
+  for DOTFILE in "$DOTFILES_DIR"/system/.{env,alias,function}.wsl; do
     [ -f "$DOTFILE" ] && . "$DOTFILE"
   done
 fi

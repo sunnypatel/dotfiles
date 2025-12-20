@@ -1,0 +1,22 @@
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Auto-load the default Node version into PATH
+if [ -s "$NVM_DIR/nvm.sh" ]; then
+  # Determine the default version
+  DEFAULT_NODE_VER=$(cat "$NVM_DIR/alias/default" 2>/dev/null || echo "")
+  if [ -n "$DEFAULT_NODE_VER" ]; then
+    # If default points to lts/*, resolve it
+    if [[ "$DEFAULT_NODE_VER" == "lts/"* ]] || [ "$DEFAULT_NODE_VER" = "lts/*" ]; then
+      # Find the actual LTS version
+      NODE_VERSION_DIR=$(. "$NVM_DIR/nvm.sh" && nvm version default)
+    else
+      NODE_VERSION_DIR="$DEFAULT_NODE_VER"
+    fi
+    # Add the Node version's bin directory to PATH if it exists
+    if [ -n "$NODE_VERSION_DIR" ] && [ "$NODE_VERSION_DIR" != "N/A" ] && [ -d "$NVM_DIR/versions/node/$NODE_VERSION_DIR/bin" ]; then
+      export PATH="$NVM_DIR/versions/node/$NODE_VERSION_DIR/bin:$PATH"
+    fi
+  fi
+fi

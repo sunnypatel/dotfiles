@@ -2,7 +2,7 @@
 
 These are my dotfiles. Take anything you want, but at your own risk.
 
-Supports both **macOS** and **Linux** systems (Ubuntu/Debian tested).
+Supports **macOS**, **Linux** (Ubuntu/Debian tested), and **Windows Subsystem for Linux (WSL)**.
 
 ## Highlights
 
@@ -164,9 +164,86 @@ source ~/.zshrc   # for zsh
 
 </details>
 
+<details>
+<summary><b>🪟 WSL (Windows Subsystem for Linux) Installation</b></summary>
+
+### Prerequisites
+
+WSL is automatically detected during installation. Ensure you have WSL2 set up with Ubuntu:
+
+```bash
+# In PowerShell (Windows)
+wsl --install -d Ubuntu
+```
+
+Once in your WSL Ubuntu environment, ensure you have basic tools:
+
+```bash
+sudo apt update
+sudo apt install -y curl git make
+```
+
+### Quick Installation
+
+Install with the automated script (WSL is automatically detected):
+
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/sunnypatel/dotfiles/main/remote-install.sh)"
+```
+
+This will clone this repo to `~/.dotfiles` and automatically run `make wsl`.
+
+### Manual Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/sunnypatel/dotfiles.git ~/.dotfiles
+```
+
+2. Install packages and symlink dotfiles:
+
+```bash
+cd ~/.dotfiles
+make wsl
+```
+
+### WSL Post-Installation
+
+1. Set your Git credentials:
+
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "your@email.com"
+git config --global github.user "your-github-username"
+```
+
+2. Create exports file for tokens:
+
+```bash
+touch ~/.dotfiles/system/.exports
+```
+
+3. Restart your shell or source the configuration:
+
+```bash
+exec $SHELL
+# or
+source ~/.bashrc  # for bash
+source ~/.zshrc   # for zsh
+```
+
+### WSL-Specific Features
+
+- **Windows Integration**: Access Windows executables via `/mnt/c/Windows/System32`
+- **Path Optimization**: WSL-specific paths are automatically configured
+- **Performance**: Optimized for WSL2 filesystem characteristics
+
+</details>
+
 ## Common Post-Installation
 
-After installation on either platform:
+After installation on any platform:
 
 1. **Populate exports file** with your tokens (example: `export GITHUB_TOKEN=abc`):
 
@@ -178,6 +255,12 @@ $EDITOR ~/.dotfiles/system/.exports
 
 ```bash
 dot test
+```
+
+   Or run a quick verification (no bats required):
+
+```bash
+bash test/verify-setup.sh
 ```
 
 ## The `dot` command
@@ -202,7 +285,8 @@ Commands:
 
 - **Permission denied**: Make sure to run commands with appropriate permissions (some require `sudo`)
 - **Command not found**: Restart your shell after installation: `exec $SHELL`
-- **Homebrew on Linux**: The dotfiles will install Homebrew for Linux automatically if needed
+- **Homebrew on Linux/WSL**: The dotfiles will install Homebrew for Linux automatically if needed
+- **WSL Detection**: WSL is automatically detected and uses optimized settings. If detection fails, you can manually run `make wsl`
 
 ### Getting Help
 

@@ -28,6 +28,8 @@ else
   cd "$TARGET"
   if [[ "$OSTYPE" =~ ^darwin ]]; then
     make macos
+  elif [ -f /proc/version ] && grep -qi microsoft /proc/version; then
+    make wsl
   else
     make linux
   fi

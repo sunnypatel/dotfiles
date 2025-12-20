@@ -1,22 +1,25 @@
 DOTFILES_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-OS := $(shell bin/is-supported bin/is-macos macos linux)
-HOMEBREW_PREFIX := $(shell bin/is-supported bin/is-macos $(shell bin/is-supported bin/is-arm64 /opt/homebrew /usr/local) /home/linuxbrew/.linuxbrew)
-export N_PREFIX = $(HOME)/.n
-PATH := $(HOMEBREW_PREFIX)/bin:$(DOTFILES_DIR)/bin:$(N_PREFIX)/bin:$(PATH)
-SHELL := env PATH=$(PATH) /bin/bash
+OS := $(shell bin/is-supported bin/is-macos macos $(shell bin/is-supported bin/is-wsl wsl linux))
+HOMEBREW_PREFIX := $(shell bin/is-supported bin/is-macos $(shell bin/is-supported bin/is-arm64 /opt/homebrew /usr/local) $(shell bin/is-supported bin/is-wsl /home/linuxbrew/.linuxbrew /home/linuxbrew/.linuxbrew))
+export NVM_DIR = $(HOME)/.nvm
+PATH := $(HOMEBREW_PREFIX)/bin:$(DOTFILES_DIR)/bin:$(PATH)
+export PATH
+SHELL := /bin/bash
 SHELLS := /private/etc/shells
 BIN := $(HOMEBREW_PREFIX)/bin
 export XDG_CONFIG_HOME = $(HOME)/.config
 export STOW_DIR = $(DOTFILES_DIR)
 export ACCEPT_EULA=Y
 
-.PHONY: test
+.PHONY: test test-verify test-all
 
 all: $(OS)
 
 macos: sudo core-macos packages link duti bun
 
 linux: core-linux packages-linux link
+
+wsl: core-linux packages-linux link
 
 core-macos: brew bash git npm
 
@@ -86,7 +89,10 @@ git: brew
 	brew install git git-extras
 
 npm: brew-packages
-	n install lts
+	@if [ ! -d "$(NVM_DIR)" ]; then \
+		curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash; \
+	fi
+	@bash -c '. $(NVM_DIR)/nvm.sh && nvm install --lts && nvm use --lts'
 
 brew-packages: brew
 	brew bundle --file=$(DOTFILES_DIR)/install/Brewfile || true
@@ -98,7 +104,7 @@ vscode-extensions: cask-apps
 	for EXT in $$(cat install/Codefile); do code --install-extension $$EXT; done
 
 node-packages: npm
-	$(N_PREFIX)/bin/npm install --force --location global $(shell cat install/npmfile)
+	@bash -c '. $(NVM_DIR)/nvm.sh && npm install --force --location global $(shell cat install/npmfile)'
 
 rust-packages: brew-packages
 	cargo install $(shell cat install/Rustfile)
@@ -134,15 +140,24 @@ apt-packages: core-linux
 		libxcb-shape0-dev \
 		libxcb-xfixes0-dev
 
-node-packages-linux: 
-	curl -L https://raw.githubusercontent.com/tj/n/master/bin/n -o n_install.sh
-	bash n_install.sh lts
-	rm n_install.sh
-	$(N_PREFIX)/bin/npm install --force --location global $(shell cat install/npmfile)
+node-packages-linux:
+	@if [ ! -d "$(NVM_DIR)" ]; then \
+		curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash; \
+	fi
+	@bash -c '. $(NVM_DIR)/nvm.sh && nvm install --lts && nvm use --lts'
+	@bash -c '. $(NVM_DIR)/nvm.sh && npm install --force --location global $(shell cat install/npmfile)'
 
 rust-packages-linux:
 	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 	source $(HOME)/.cargo/env && cargo install $(shell cat install/Rustfile)
 
 test:
-	bats test
+	@echo "Running full test suite with bats..."
+	@bats test
+
+test-verify:
+	@echo "Running quick verification (no bats required)..."
+	@bash test/verify-setup.sh
+
+test-all: test-verify test
+	@echo "All tests completed!"
