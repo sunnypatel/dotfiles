@@ -10,3 +10,4 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+# Note: cargo/env is already sourced in .bash_profile, no need to source again

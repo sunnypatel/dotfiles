@@ -27,12 +27,21 @@ core-linux:
 	sudo apt-get update
 	sudo apt-get upgrade -y
 	sudo apt-get dist-upgrade -f
-	sudo apt-get install -y build-essential curl file git
+	sudo apt-get install -y build-essential curl file git locales
+	@if ! locale -a | grep -q "en_US.utf8"; then \
+		echo "Generating en_US.UTF-8 locale..."; \
+		sudo sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen || \
+		echo "en_US.UTF-8 UTF-8" | sudo tee -a /etc/locale.gen; \
+		sudo locale-gen; \
+	fi
 
 stow-macos: brew
 	is-executable stow || brew install stow
 
 stow-linux: core-linux
+	is-executable stow || sudo apt-get -y install stow
+
+stow-wsl: core-linux
 	is-executable stow || sudo apt-get -y install stow
 
 sudo:
@@ -46,14 +55,21 @@ packages: brew-packages cask-apps node-packages rust-packages java
 packages-linux: apt-packages node-packages-linux rust-packages-linux
 
 link: stow-$(OS)
-	for FILE in $$(\ls -A runcom); do if [ -f $(HOME)/$$FILE -a ! -h $(HOME)/$$FILE ]; then \
-		mv -v $(HOME)/$$FILE{,.bak}; fi; done
+	for FILE in $$(\ls -A runcom); do \
+		if [ -f $(HOME)/$$FILE -a ! -h $(HOME)/$$FILE ]; then \
+			case "$$FILE" in *.bak) ;; *) \
+				mv -v $(HOME)/$$FILE{,.bak}; \
+			esac; \
+		fi; \
+	done
 	mkdir -p "$(XDG_CONFIG_HOME)"
 	# Backup conflicting files in XDG config before stowing
 	cd $(DOTFILES_DIR)/config && \
 	for FILE in $$(find . -type f -o -type l | sed 's|^./||'); do \
 		if [ -f "$(XDG_CONFIG_HOME)/$$FILE" -a ! -h "$(XDG_CONFIG_HOME)/$$FILE" ]; then \
-			mv -v "$(XDG_CONFIG_HOME)/$$FILE"{,.bak}; \
+			case "$$FILE" in *.bak) ;; *) \
+				mv -v "$(XDG_CONFIG_HOME)/$$FILE"{,.bak}; \
+			esac; \
 		fi; \
 	done
 	stow -t "$(HOME)" runcom
