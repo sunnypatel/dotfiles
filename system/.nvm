@@ -1,31 +1,40 @@
 export NVM_DIR="$HOME/.nvm"
 
-# Auto-load the default Node version into PATH (lazy load nvm only if needed)
+# LAZY LOAD NVM - Only load when actually needed
+# This saves ~1.5s on every shell startup
+
 if [ -s "$NVM_DIR/nvm.sh" ]; then
-  # Determine the default version without loading nvm.sh first
-  DEFAULT_NODE_VER=$(cat "$NVM_DIR/alias/default" 2>/dev/null || echo "")
-  if [ -n "$DEFAULT_NODE_VER" ]; then
-    # If default points to lts/*, we need to resolve it (requires nvm)
-    if [[ "$DEFAULT_NODE_VER" == "lts/"* ]] || [ "$DEFAULT_NODE_VER" = "lts/*" ]; then
-      # Load nvm to resolve LTS version
-      \. "$NVM_DIR/nvm.sh"
-      NODE_VERSION_DIR=$(nvm version default 2>/dev/null || echo "")
+  # Add default node to PATH immediately (without loading nvm)
+  # First try to find the resolved version
+  if [ -f "$NVM_DIR/alias/default" ]; then
+    DEFAULT_ALIAS=$(cat "$NVM_DIR/alias/default" 2>/dev/null)
+    # If it's an lts alias, try to find the resolved version
+    if [[ "$DEFAULT_ALIAS" == lts/* ]]; then
+      LTS_NAME="${DEFAULT_ALIAS#lts/}"
+      # Find the actual version from the lts alias
+      if [ -f "$NVM_DIR/alias/lts/$LTS_NAME" ]; then
+        NODE_VERSION=$(cat "$NVM_DIR/alias/lts/$LTS_NAME" 2>/dev/null)
+      fi
     else
-      NODE_VERSION_DIR="$DEFAULT_NODE_VER"
-    fi
-    # Add the Node version's bin directory to PATH if it exists
-    if [ -n "$NODE_VERSION_DIR" ] && [ "$NODE_VERSION_DIR" != "N/A" ] && [ -d "$NVM_DIR/versions/node/$NODE_VERSION_DIR/bin" ]; then
-      export PATH="$NVM_DIR/versions/node/$NODE_VERSION_DIR/bin:$PATH"
+      NODE_VERSION="$DEFAULT_ALIAS"
     fi
   fi
   
-  # Lazy load nvm.sh only if not already loaded (for interactive use)
-  # This allows nvm commands to work when needed without slowing down shell startup
-  if ! command -v nvm >/dev/null 2>&1; then
+  # Add node bin to PATH if we found a version
+  if [ -n "$NODE_VERSION" ] && [ -d "$NVM_DIR/versions/node/$NODE_VERSION/bin" ]; then
+    export PATH="$NVM_DIR/versions/node/$NODE_VERSION/bin:$PATH"
+  else
+    # Fallback: find most recent node version
+    NODE_VERSION=$(ls -v "$NVM_DIR/versions/node" 2>/dev/null | tail -1)
+    if [ -n "$NODE_VERSION" ] && [ -d "$NVM_DIR/versions/node/$NODE_VERSION/bin" ]; then
+      export PATH="$NVM_DIR/versions/node/$NODE_VERSION/bin:$PATH"
+    fi
+  fi
+
+  # Lazy load nvm - only load when 'nvm' command is actually called
+  nvm() {
+    unset -f nvm node npm npx
     \. "$NVM_DIR/nvm.sh"
-  fi
-  
-  # Lazy load bash completion (only load if in interactive shell and completion is requested)
-  # This saves ~0.09s on every shell startup
-  # Users can still get completion by running: source "$NVM_DIR/bash_completion"
+    nvm "$@"
+  }
 fi

@@ -50,9 +50,17 @@ done
 [ -z "$PS1" ] && export DOTFILES_DIR && return
 
 # Source interactive dotfiles (aliases, prompt, completion, etc.)
-for DOTFILE in "$DOTFILES_DIR"/system/.{alias,fzf,grep,prompt,completion,fix,zoxide}; do
-  [ -f "$DOTFILE" ] && . "$DOTFILE"
-done
+# Skip bash-specific prompt in zsh (zsh uses Zim's prompt)
+if [ -z "$ZSH_VERSION" ]; then
+  for DOTFILE in "$DOTFILES_DIR"/system/.{alias,fzf,grep,prompt,completion,fix,zoxide}; do
+    [ -f "$DOTFILE" ] && . "$DOTFILE"
+  done
+else
+  # In zsh, skip the bash prompt but load other interactive files
+  for DOTFILE in "$DOTFILES_DIR"/system/.{alias,fzf,grep,completion,fix,zoxide}; do
+    [ -f "$DOTFILE" ] && . "$DOTFILE"
+  done
+fi
 
 if is-macos; then
   for DOTFILE in "$DOTFILES_DIR"/system/.{env,alias,function}.macos; do
@@ -64,9 +72,15 @@ elif is-wsl; then
   done
 fi
 
-# Set LSCOLORS
-
-eval "$(dircolors -b "$DOTFILES_DIR"/system/.dir_colors)"
+# Set LSCOLORS (cached for speed)
+DIRCOLORS_CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/dircolors.sh"
+if [ -f "$DIRCOLORS_CACHE" ] && [ "$DIRCOLORS_CACHE" -nt "$DOTFILES_DIR/system/.dir_colors" ]; then
+  . "$DIRCOLORS_CACHE"
+else
+  mkdir -p "$(dirname "$DIRCOLORS_CACHE")"
+  dircolors -b "$DOTFILES_DIR/system/.dir_colors" > "$DIRCOLORS_CACHE"
+  . "$DIRCOLORS_CACHE"
+fi
 
 # Wrap up
 

@@ -48,11 +48,12 @@ alias .....="cd ../../../.."
 alias -- -="cd -"                  # Go to previous dir with -
 alias cd.='cd $(readlink -f .)'    # Go to real dir (i.e. if current dir is linked)
 
-# p/npm
+# pnpm (replace npm/npx with pnpm equivalents)
 
 alias b="bun"
 alias p="pnpm"
 alias npm="pnpm"
+alias npx="pnpm dlx"
 alias ncu="npm-check-updates --interactive"
 alias ncuw="npm-check-updates --interactive --root --workspaces"
 

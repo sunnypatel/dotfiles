@@ -1,4 +1,7 @@
-source /usr/share/bash-completion/completions/fzf
+# Only source bash completion in bash
+if [ -n "$BASH_VERSION" ]; then
+  [ -f /usr/share/bash-completion/completions/fzf ] && source /usr/share/bash-completion/completions/fzf
+fi
 
 export FZF_CTRL_R_OPTS="
   --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
