@@ -27,22 +27,23 @@ endif
 
 all: $(OS)
 install: all
-
 macos: install-brew install-packages stow-packages
 linux: install-deps install-brew install-packages stow-packages
 wsl: linux
 
 install-deps:
 ifeq ($(UNAME_S),Linux)
-	sudo apt-get update && sudo apt-get install -y build-essential curl git
+	@if ! command -v gcc >/dev/null 2>&1 || ! command -v curl >/dev/null 2>&1 || ! command -v git >/dev/null 2>&1; then \
+		sudo apt-get update && sudo apt-get install -y build-essential curl git; \
+	fi
 endif
 install-brew:
-	@if ! command -v brew >/dev/null 2>&1; then \
+	@if ! command -v brew >/dev/null 2>&1 && ! [ -x $(BREW_PREFIX)/bin/brew ]; then \
 		echo "Installing Homebrew..."; \
 		curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash; \
 	fi
 install-packages: install-brew
-	brew bundle --file=$(DOTFILES_DIR)/Brewfile
+	$(BREW_PREFIX)/bin/brew bundle --file=$(DOTFILES_DIR)/Brewfile
 stow-packages:
 	stow -R -d $(DOTFILES_DIR)/stow -t $(HOME) zsh git tmux nvim
 unlink:
