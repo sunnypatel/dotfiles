@@ -13,8 +13,8 @@ This roadmap transforms a bloated multi-tool dotfiles repository (60+ files acro
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Shell Consolidation** - Zsh-only setup with unified configuration
-- [ ] **Phase 2: Stow Package Migration** - Package-per-tool structure for git, tmux, neovim
-- [ ] **Phase 3: Platform Support** - Cross-platform detection and installation
+- [x] **Phase 2: Stow Package Migration** - Package-per-tool structure for git, tmux, neovim
+- [x] **Phase 3: Platform Support** - Cross-platform detection and installation
 - [ ] **Phase 4: Installation & Cleanup** - Simplified Makefile and final cleanup
 - [ ] **Phase 5: CI Validation** - Automated testing on Ubuntu and macOS
 - [ ] **Phase 6: Documentation** - Updated README and historical record
@@ -50,10 +50,10 @@ Plans:
 **Plans**: 4 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Create zsh/ Stow package with ZDOTDIR and XDG migration
-- [ ] 02-02-PLAN.md — Create git/ and tmux/ Stow packages with curated configs
-- [ ] 02-03-PLAN.md — Create nvim/ Stow package with lazy.nvim and LSP
-- [ ] 02-04-PLAN.md — Remove unused configs, clean up directories, verify stow
+- [x] 02-01-PLAN.md — Create zsh/ Stow package with ZDOTDIR and XDG migration
+- [x] 02-02-PLAN.md — Create git/ and tmux/ Stow packages with curated configs
+- [x] 02-03-PLAN.md — Create nvim/ Stow package with lazy.nvim and LSP
+- [x] 02-04-PLAN.md — Remove unused configs, clean up directories, verify stow
 
 ### Phase 3: Platform Support
 **Goal**: Single repository works identically across macOS, Linux, and WSL2
@@ -67,8 +67,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Create minimal Brewfile and rewrite Makefile with inline platform detection
-- [ ] 03-02-PLAN.md — Remove bin/ platform scripts, clean .zsh_path, remove obsolete tests
+- [x] 03-01-PLAN.md — Create minimal Brewfile and rewrite Makefile with inline platform detection
+- [x] 03-02-PLAN.md — Remove bin/ platform scripts, clean .zsh_path, remove obsolete tests
 
 ### Phase 4: Installation & Cleanup
 **Goal**: Simplified installation with all unused tools removed
@@ -118,8 +118,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Shell Consolidation | 2/2 | ✓ Complete | 2026-02-14 |
-| 2. Stow Package Migration | 0/4 | Planning complete | - |
-| 3. Platform Support | 0/2 | Planning complete | - |
+| 2. Stow Package Migration | 4/4 | ✓ Complete | 2026-02-14 |
+| 3. Platform Support | 2/2 | ✓ Complete | 2026-02-14 |
 | 4. Installation & Cleanup | 0/TBD | Not started | - |
 | 5. CI Validation | 0/TBD | Not started | - |
 | 6. Documentation | 0/TBD | Not started | - |
