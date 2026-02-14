@@ -1,8 +1,0 @@
-# https://github.com/ajeetdsouza/zoxide
-
-# Initialize zoxide for the current shell
-if [ -n "$ZSH_VERSION" ]; then
-  eval "$(zoxide init zsh)"
-elif [ -n "$BASH_VERSION" ]; then
-  eval "$(zoxide init bash)"
-fi
