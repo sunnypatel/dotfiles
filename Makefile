@@ -23,32 +23,27 @@ else ifeq ($(UNAME_S),Linux)
     BREW_PREFIX := /home/linuxbrew/.linuxbrew
 endif
 
-.PHONY: all macos linux wsl install-deps install-brew install-packages stow-packages unlink
+.PHONY: all install macos linux wsl install-deps install-brew install-packages stow-packages unlink
 
 all: $(OS)
+install: all
 
 macos: install-brew install-packages stow-packages
-
 linux: install-deps install-brew install-packages stow-packages
-
 wsl: linux
 
 install-deps:
 ifeq ($(UNAME_S),Linux)
 	sudo apt-get update && sudo apt-get install -y build-essential curl git
 endif
-
 install-brew:
 	@if ! command -v brew >/dev/null 2>&1; then \
 		echo "Installing Homebrew..."; \
 		curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash; \
 	fi
-
 install-packages: install-brew
 	brew bundle --file=$(DOTFILES_DIR)/Brewfile
-
 stow-packages:
 	stow -d $(DOTFILES_DIR)/stow -t $(HOME) zsh git tmux nvim
-
 unlink:
 	stow -d $(DOTFILES_DIR)/stow -t $(HOME) -D zsh git tmux nvim
