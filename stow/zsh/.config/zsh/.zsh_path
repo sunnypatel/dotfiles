@@ -31,11 +31,7 @@ typeset -U path
 
 # Build PATH array with priority order (first = highest priority)
 path=(
-  $DOTFILES_DIR/bin
-  $HOME/.cargo/bin
-  $HOME/.local/share/pnpm
-  $HOME/.bun/bin
-  $HOME/.deno/bin
+  $HOME/.local/bin
   ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/bin}
   ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/sbin}
   /usr/local/bin
