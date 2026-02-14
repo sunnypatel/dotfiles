@@ -23,6 +23,20 @@ elif [[ -d /home/linuxbrew/.linuxbrew ]]; then
 fi
 
 ###############################################################################
+# NVM (Node Version Manager)
+###############################################################################
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+###############################################################################
+# pnpm
+###############################################################################
+
+export PNPM_HOME="$HOME/.local/share/pnpm"
+
+###############################################################################
 # PATH Construction
 ###############################################################################
 
@@ -31,6 +45,7 @@ typeset -U path
 
 # Build PATH array with priority order (first = highest priority)
 path=(
+  $PNPM_HOME
   $HOME/.local/bin
   ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/bin}
   ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/sbin}
