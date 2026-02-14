@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test-ubuntu-docker:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker test image
+        run: docker build -t dotfiles-test -f .github/Dockerfile.ubuntu .
+
+      - name: Run tests in container
+        run: docker run --rm dotfiles-test bash -c "make install && make test"
+
+  test-macos:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-14, macos-15]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dotfiles
+        run: make install
+
+      - name: Run tests
+        run: make test
