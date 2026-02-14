@@ -64,10 +64,11 @@ Plans:
   2. Brewfile installs essential packages on both macOS and Linux via Homebrew
   3. Platform-specific shell config loads automatically (aliases-darwin.zsh, aliases-linux.zsh)
   4. Makefile provides install targets that work on macOS and Linux
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD
+- [ ] 03-01-PLAN.md — Create minimal Brewfile and rewrite Makefile with inline platform detection
+- [ ] 03-02-PLAN.md — Remove bin/ platform scripts, clean .zsh_path, remove obsolete tests
 
 ### Phase 4: Installation & Cleanup
 **Goal**: Simplified installation with all unused tools removed
@@ -118,7 +119,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 |-------|----------------|--------|-----------|
 | 1. Shell Consolidation | 2/2 | ✓ Complete | 2026-02-14 |
 | 2. Stow Package Migration | 0/4 | Planning complete | - |
-| 3. Platform Support | 0/TBD | Not started | - |
+| 3. Platform Support | 0/2 | Planning complete | - |
 | 4. Installation & Cleanup | 0/TBD | Not started | - |
 | 5. CI Validation | 0/TBD | Not started | - |
 | 6. Documentation | 0/TBD | Not started | - |
