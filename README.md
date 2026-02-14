@@ -27,6 +27,7 @@ Installation includes 8 Homebrew packages: git, neovim, tmux, stow, zsh, fzf, ri
 │   └── nvim/             # Neovim config (~/.config/nvim/)
 ├── test/                 # BATS test suite
 ├── .github/              # CI workflows + Dockerfile
+├── CONTRIBUTING.md       # How to add new tools
 └── REMOVED.md            # What was deleted and why
 ```
 
@@ -165,21 +166,7 @@ Stow creates symlinks from the package directories into `$HOME`. For example:
 
 ### Adding New Tools
 
-To add configuration for a new tool:
-
-1. Create a new package directory under `stow/toolname/`
-2. Add files in the structure they should have relative to `$HOME`
-3. Update the `stow-packages` target in `Makefile` to include your new package
-4. Run `make stow-packages` to create symlinks
-
-Example for adding a hypothetical `alacritty` config:
-
-```bash
-mkdir -p stow/alacritty/.config/alacritty
-# Add your alacritty.yml there
-# Edit Makefile stow-packages target to include 'alacritty'
-make stow-packages
-```
+See [CONTRIBUTING.md](CONTRIBUTING.md) for step-by-step instructions on adding a new tool as a Stow package.
 
 ## Testing
 
