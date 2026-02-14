@@ -25,7 +25,7 @@ endif
 BREW := $(or $(shell command -v brew 2>/dev/null),$(BREW_PREFIX)/bin/brew)
 STOW := $(or $(shell command -v stow 2>/dev/null),$(BREW_PREFIX)/bin/stow)
 
-.PHONY: all install macos linux wsl install-deps install-brew install-packages stow-packages set-shell unlink
+.PHONY: all install macos linux wsl install-deps install-brew install-packages stow-packages set-shell unlink test test-setup
 
 all: $(OS)
 install: all
@@ -59,3 +59,9 @@ set-shell:
 	fi
 unlink:
 	$(STOW) -d $(DOTFILES_DIR)/stow -t $(HOME) -D zsh git tmux nvim
+
+test-setup:
+	@command -v bats >/dev/null 2>&1 || $(BREW) install bats-core
+
+test: test-setup
+	bats test/*.bats
