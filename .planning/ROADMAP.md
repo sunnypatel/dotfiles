@@ -12,7 +12,7 @@ This roadmap transforms a bloated multi-tool dotfiles repository (60+ files acro
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Shell Consolidation** - Zsh-only setup with unified configuration
+- [x] **Phase 1: Shell Consolidation** - Zsh-only setup with unified configuration
 - [ ] **Phase 2: Stow Package Migration** - Package-per-tool structure for git, tmux, neovim
 - [ ] **Phase 3: Platform Support** - Cross-platform detection and installation
 - [ ] **Phase 4: Installation & Cleanup** - Simplified Makefile and final cleanup
@@ -34,8 +34,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 2 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Create consolidated Zsh configuration (.zshenv, .zshrc, .zimrc)
-- [ ] 01-02-PLAN.md — Remove bash config and unused system files, verify setup
+- [x] 01-01-PLAN.md — Create consolidated Zsh configuration (.zshenv, .zshrc, .zimrc)
+- [x] 01-02-PLAN.md — Remove bash config and unused system files, verify setup
 
 ### Phase 2: Stow Package Migration
 **Goal**: Package-per-tool directory structure with XDG-compliant configs
@@ -113,7 +113,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Shell Consolidation | 0/2 | Planned | - |
+| 1. Shell Consolidation | 2/2 | ✓ Complete | 2026-02-14 |
 | 2. Stow Package Migration | 0/TBD | Not started | - |
 | 3. Platform Support | 0/TBD | Not started | - |
 | 4. Installation & Cleanup | 0/TBD | Not started | - |
