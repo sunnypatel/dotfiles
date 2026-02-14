@@ -430,7 +430,7 @@ tmux_conf_uninstall_plugins_on_reload=true
 #   - updating plugins: <prefix> + u
 
 # /!\ do not add set -g @plugin 'tmux-plugins/tpm'
-# /!\ do not add run '~/.tmux/plugins/tpm/tpm'
+# /!\ do not add run '~/.config/tmux/plugins/tpm/tpm'
 
 # to enable a plugin, use the 'set -g @plugin' syntax:
 # visit https://github.com/tmux-plugins for available plugins
@@ -474,8 +474,8 @@ set-option -g automatic-rename on
 set-option -g automatic-rename-format '#{b:pane_current_path}'
 
 # hot reload tmux config w/ <leader> + r
-bind-key r source-file ~/.tmux.conf \; display-message "~/.tmux.conf reloaded"
-bind-key M split-window -h "vim ~/.tmux.conf"
+bind-key r source-file ~/.config/tmux/tmux.conf \; display-message "~/.config/tmux/tmux.conf reloaded"
+bind-key M split-window -h "vim ~/.config/tmux/tmux.conf"
 
 # TokyoNight colors for Tmux
 
