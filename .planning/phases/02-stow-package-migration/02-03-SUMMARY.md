@@ -123,7 +123,7 @@ Created the Neovim entry point with:
 
 ### Task 2: Create plugin specs for LSP, editor features, and UI
 **Status:** Complete
-**Commit:** b0ee135
+**Commit:** 5ee3224
 **Files:** nvim/.config/nvim/lua/plugins/lsp.lua, editor.lua, ui.lua
 
 Created three plugin spec files:
@@ -210,7 +210,7 @@ None - plan executed exactly as written. The plugin count is 21 (1 over the sugg
 
 **Commits:**
 - FOUND: d5960e8 (Task 1: init.lua with lazy.nvim bootstrap)
-- FOUND: b0ee135 (Task 2: plugin specs for LSP, editor, UI)
+- FOUND: 5ee3224 (Task 2: plugin specs for LSP, editor, UI)
 
 **Stow test:**
 - PASSED: `stow -n nvim` completes without errors
