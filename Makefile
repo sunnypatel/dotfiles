@@ -44,6 +44,6 @@ install-brew:
 install-packages: install-brew
 	brew bundle --file=$(DOTFILES_DIR)/Brewfile
 stow-packages:
-	stow -d $(DOTFILES_DIR)/stow -t $(HOME) zsh git tmux nvim
+	stow -R -d $(DOTFILES_DIR)/stow -t $(HOME) zsh git tmux nvim
 unlink:
 	stow -d $(DOTFILES_DIR)/stow -t $(HOME) -D zsh git tmux nvim
