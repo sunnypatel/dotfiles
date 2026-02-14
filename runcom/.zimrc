@@ -1,41 +1,79 @@
+###############################################################################
+# .zimrc - Zimfw Module Configuration
+###############################################################################
+# Purpose: Define which Zimfw modules to load
+# Source: https://zimfw.sh/docs/modules/
 #
-# Modules
+# Module loading order matters:
+# - Core modules (environment, input, utility) first
+# - Modules that add completions before 'completion' module
+# - Completion module near end (after modules that add completion defs)
+# - Syntax highlighting must be last
+###############################################################################
+
+#
+# Core Modules - Sane Defaults
 #
 
-# Sets sane Zsh built-in environment options.
-# zmodule environment
-# Applies correct bindkeys for input events.
-# zmodule input
-# Utility aliases and functions. Adds colour to ls, grep and less.
-# zmodule utility
+# Sets sane Zsh built-in environment options
+# Provides: AUTO_CD, INTERACTIVE_COMMENTS, proper globbing, etc.
+zmodule environment
+
+# Applies correct bindkeys for input events
+# Provides: Home, End, Delete, Insert, arrow keys, etc.
+zmodule input
+
+# Utility aliases and functions
+# Provides: ls colors, grep colors, less defaults, chmod shortcuts
+zmodule utility
 
 #
-# Prompt
+# Git Integration
 #
 
-# Exposes to prompts how long the last command took to execute, used by asciiship.
+# Git aliases and functions
+# Provides: g, ga, gc, gco, gd, etc. + git utility functions
+zmodule git
+
+#
+# Prompt Modules
+#
+
+# Exposes how long the last command took to execute
+# Used by asciiship prompt module
 zmodule duration-info
-# Exposes git repository status information to prompts, used by asciiship.
+
+# Exposes git repository status information to prompts
+# Used by asciiship prompt module
 zmodule git-info
-# A heavily reduced, ASCII-only version of the Spaceship and Starship prompts.
+
+# A heavily reduced, ASCII-only version of Spaceship/Starship prompts
+# Lightweight, fast, displays git status and command duration
 zmodule asciiship
 
 #
-# Completion
+# Completion System
 #
 
-# Additional completion definitions for Zsh.
+# Additional completion definitions for Zsh
+# Adds completions for common tools (docker, npm, git, etc.)
 zmodule zsh-users/zsh-completions --fpath src
-# Enables and configures smart and extensive tab completion.
-# completion must be sourced after all modules that add completion definitions.
+
+# Tab completion - enables and configures Zsh completion system
+# MUST be after all modules that add completion definitions
+# Handles compinit with proper caching for fast startup
 zmodule completion
 
 #
-# Modules that must be initialized last
+# Interactive Enhancements
 #
 
-# Fish-like syntax highlighting for Zsh.
-# zsh-users/zsh-syntax-highlighting must be sourced after completion
+# Fish-like syntax highlighting for Zsh
+# Highlights commands as you type (green = valid, red = invalid)
+# MUST be after completion module
 zmodule zsh-users/zsh-syntax-highlighting
-# Fish-like autosuggestions for Zsh.
+
+# Fish-like autosuggestions for Zsh
+# Suggests commands from history as you type (gray text)
+# Accept with right arrow or Ctrl+F
 zmodule zsh-users/zsh-autosuggestions
