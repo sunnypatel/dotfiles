@@ -102,42 +102,42 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SHL-01 | — | Pending |
-| SHL-02 | — | Pending |
-| SHL-03 | — | Pending |
-| SHL-04 | — | Pending |
-| SHL-05 | — | Pending |
-| SHL-06 | — | Pending |
-| SHL-07 | — | Pending |
-| GIT-01 | — | Pending |
-| GIT-02 | — | Pending |
-| GIT-03 | — | Pending |
-| TMX-01 | — | Pending |
-| TMX-02 | — | Pending |
-| NVM-01 | — | Pending |
-| NVM-02 | — | Pending |
-| INS-01 | — | Pending |
-| INS-02 | — | Pending |
-| INS-03 | — | Pending |
-| INS-04 | — | Pending |
-| PLT-01 | — | Pending |
-| PLT-02 | — | Pending |
-| PLT-03 | — | Pending |
-| STR-01 | — | Pending |
-| STR-02 | — | Pending |
-| STR-03 | — | Pending |
-| CLN-01 | — | Pending |
-| CLN-02 | — | Pending |
-| CLN-03 | — | Pending |
-| CLN-04 | — | Pending |
-| CLN-05 | — | Pending |
-| CLN-06 | — | Pending |
+| SHL-01 | Phase 1 | Pending |
+| SHL-02 | Phase 1 | Pending |
+| SHL-03 | Phase 1 | Pending |
+| SHL-04 | Phase 1 | Pending |
+| SHL-05 | Phase 1 | Pending |
+| SHL-06 | Phase 1 | Pending |
+| SHL-07 | Phase 1 | Pending |
+| GIT-01 | Phase 2 | Pending |
+| GIT-02 | Phase 2 | Pending |
+| GIT-03 | Phase 2 | Pending |
+| TMX-01 | Phase 2 | Pending |
+| TMX-02 | Phase 2 | Pending |
+| NVM-01 | Phase 2 | Pending |
+| NVM-02 | Phase 2 | Pending |
+| INS-01 | Phase 3 | Pending |
+| INS-02 | Phase 3 | Pending |
+| INS-03 | Phase 2 | Pending |
+| INS-04 | Phase 4 | Pending |
+| PLT-01 | Phase 3 | Pending |
+| PLT-02 | Phase 3 | Pending |
+| PLT-03 | Phase 3 | Pending |
+| STR-01 | Phase 2 | Pending |
+| STR-02 | Phase 2 | Pending |
+| STR-03 | Phase 2 | Pending |
+| CLN-01 | Phase 1 | Pending |
+| CLN-02 | Phase 2 | Pending |
+| CLN-03 | Phase 1 | Pending |
+| CLN-04 | Phase 4 | Pending |
+| CLN-05 | Phase 4 | Pending |
+| CLN-06 | Phase 4 | Pending |
 
 **Coverage:**
 - v1 requirements: 30 total
-- Mapped to phases: 0
-- Unmapped: 30
+- Mapped to phases: 30
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-13*
-*Last updated: 2026-02-13 after initial definition*
+*Last updated: 2026-02-13 after roadmap creation*
