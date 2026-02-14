@@ -7,16 +7,12 @@
 
 [core]
 	excludesfile = ~/.config/git/ignore
-	editor = code --wait
+	editor = nvim
 	filemode = false
 	trustctime = false
 	autocrlf = input
 	untrackedCache = true
-	pager = delta
 	ignorecase = false
-
-[credential]
-	helper = osxkeychain
 
 [pull]
 	rebase = true
@@ -109,9 +105,6 @@
 
 	# View the current working tree status using the short format
 	s = status -s;
-
-	# Diff
-	d = diff --patch-with-stat;
 
 	# Show the diff between the latest commit and the current state
 	d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
@@ -211,9 +204,6 @@
 	# update branchs
 	branchs = !git fetch --all && git fetch -p && git branch -a;
 
-	# change to another branch and update
-	go = "!f() { git checkout $1 && git pull origin $1; }; f";
-
 	# remove branchs that dont exist on remote
 	# (you should be on one existing branch)
 	# TODO: 'git remote prune origin' does the same?
@@ -293,30 +283,12 @@
 	renames = copies
 	indentHeuristic = true
 	colorMoved = default
-	tool = vscode
-
-[difftool]
-	prompt = false
-
-[difftool "vscode"]
-	cmd = code --wait --diff $LOCAL $REMOTE
-	path =
+	tool = nvimdiff
 
 [merge]
 	conflictstyle = diff3
 	defaultToUpstream = true
-	tool = vscode
-
-[mergetool]
-	prompt = false
-
-[mergetool "vscode"]
-	cmd = code --wait $MERGED
-	trustExitCode = true
-
-[delta]
-	light = false
-	navigate = true
+	tool = nvimdiff
 
 [color]
 	ui = auto
