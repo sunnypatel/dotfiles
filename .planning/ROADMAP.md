@@ -47,10 +47,13 @@ Plans:
   3. Git config exists with curated aliases and core settings at ~/.config/git/
   4. Tmux config (gpakosz/.tmux) exists at XDG-compliant ~/.config/tmux/
   5. Neovim has lightweight Lua config with LSP and basic plugins
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] TBD
+- [ ] 02-01-PLAN.md — Create zsh/ Stow package with ZDOTDIR and XDG migration
+- [ ] 02-02-PLAN.md — Create git/ and tmux/ Stow packages with curated configs
+- [ ] 02-03-PLAN.md — Create nvim/ Stow package with lazy.nvim and LSP
+- [ ] 02-04-PLAN.md — Remove unused configs, clean up directories, verify stow
 
 ### Phase 3: Platform Support
 **Goal**: Single repository works identically across macOS, Linux, and WSL2
@@ -114,7 +117,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Shell Consolidation | 2/2 | ✓ Complete | 2026-02-14 |
-| 2. Stow Package Migration | 0/TBD | Not started | - |
+| 2. Stow Package Migration | 0/4 | Planning complete | - |
 | 3. Platform Support | 0/TBD | Not started | - |
 | 4. Installation & Cleanup | 0/TBD | Not started | - |
 | 5. CI Validation | 0/TBD | Not started | - |
