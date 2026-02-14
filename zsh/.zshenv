@@ -30,6 +30,10 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 
+# Tell Zsh to read configs from XDG-compliant location instead of ~/
+# After stowing, .zshenv lives at ~/.zshenv, other configs at ~/.config/zsh/
+export ZDOTDIR="${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}"
+
 # Locale configuration
 export LANG="${LANG:-en_US.UTF-8}"
 export LC_ALL="${LC_ALL:-en_US.UTF-8}"
@@ -48,4 +52,4 @@ fi
 # PATH (loaded from separate file for easy editing)
 ###############################################################################
 
-source "${ZDOTDIR:-${0:a:h}}/.zsh_path"
+source "${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}/.zsh_path"

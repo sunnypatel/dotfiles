@@ -57,6 +57,14 @@ setopt NO_NOMATCH               # Pass through unmatched globs (bash-like)
 setopt INTERACTIVE_COMMENTS     # Allow comments in interactive shell
 
 ###############################################################################
+# Directory Colors (Linux only - macOS uses LSCOLORS)
+###############################################################################
+
+if [[ "$OSTYPE" != darwin* ]] && [[ -f "${ZDOTDIR:-$HOME}/.dir_colors" ]]; then
+  eval "$(dircolors "${ZDOTDIR:-$HOME}/.dir_colors")"
+fi
+
+###############################################################################
 # Aliases (loaded from separate file for easy editing)
 ###############################################################################
 
