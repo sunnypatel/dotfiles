@@ -1,0 +1,143 @@
+# Requirements: Dotfiles Simplification
+
+**Defined:** 2026-02-13
+**Core Value:** Every file in this repo should be immediately understandable. If you can't tell what something does in 10 seconds, it doesn't belong here.
+
+## v1 Requirements
+
+Requirements for initial release. Each maps to roadmap phases.
+
+### Shell
+
+- [ ] **SHL-01**: Zsh is the sole shell — single .zshrc entry point, no bash config exists
+- [ ] **SHL-02**: Curated shell aliases for productivity (kept from current useful set)
+- [ ] **SHL-03**: Shell functions limited to commonly used utilities only
+- [ ] **SHL-04**: Tab completion with minimal plugin management (not Oh My Zsh)
+- [ ] **SHL-05**: Command history with deduplication and sensible defaults
+- [ ] **SHL-06**: Clean shell prompt without heavy framework
+- [ ] **SHL-07**: PATH management with platform-aware paths (Homebrew Intel/ARM/Linux)
+
+### Git
+
+- [ ] **GIT-01**: Git configuration with curated aliases (kept from current)
+- [ ] **GIT-02**: Core git settings (editor, merge tool, diff pager)
+- [ ] **GIT-03**: Global gitignore patterns
+
+### Tmux
+
+- [ ] **TMX-01**: Full gpakosz/.tmux config preserved (navigation, copy mode, display, buffers, mouse)
+- [ ] **TMX-02**: Tmux config placed in XDG-compliant location (~/.config/tmux/)
+
+### Neovim
+
+- [ ] **NVM-01**: Lightweight Lua-based neovim config (kickstart.nvim or from-scratch)
+- [ ] **NVM-02**: Basic plugins via lazy.nvim (LSP, syntax highlighting, file navigation)
+
+### Installation
+
+- [ ] **INS-01**: Makefile-based installation for macOS and Linux
+- [ ] **INS-02**: Minimal Brewfile with only essential packages (zsh, neovim, tmux, git, stow, and direct dependencies)
+- [ ] **INS-03**: GNU Stow symlink management with package-per-tool structure
+- [ ] **INS-04**: Idempotent installation — safe to re-run without errors
+
+### Platform
+
+- [ ] **PLT-01**: macOS support (Intel and Apple Silicon)
+- [ ] **PLT-02**: Linux support (Ubuntu/Debian)
+- [ ] **PLT-03**: WSL2 detection and support
+
+### Structure
+
+- [ ] **STR-01**: Package-per-tool directory layout (zsh/, git/, tmux/, nvim/)
+- [ ] **STR-02**: XDG Base Directory compliance — configs in ~/.config/
+- [ ] **STR-03**: Every file self-explanatory — no clever abstractions
+
+### Cleanup
+
+- [ ] **CLN-01**: Remove all bash-specific config (.bash_profile, .bashrc, bash prompt)
+- [ ] **CLN-02**: Remove unused tools config (thefuck, topgrade, zoxide, fzf, delta, alacritty, prettier, duti)
+- [ ] **CLN-03**: Remove unused shell functions (network utilities, file utilities)
+- [ ] **CLN-04**: Remove macOS defaults scripts
+- [ ] **CLN-05**: Remove remote install script
+- [ ] **CLN-06**: Remove Node.js/Rust package management (npmfile, Rustfile, nvm config)
+
+## v2 Requirements
+
+Deferred to future release. Tracked but not in current roadmap.
+
+### Windows
+
+- **WIN-01**: PowerShell profile for Windows development
+- **WIN-02**: Windows Terminal configuration
+- **WIN-03**: Native Windows tool installation (winget/scoop)
+
+### Quality
+
+- **QAL-01**: GitHub Actions CI testing on Ubuntu and macOS
+- **QAL-02**: Automated fresh-install validation
+
+## Out of Scope
+
+Explicitly excluded. Documented to prevent scope creep.
+
+| Feature | Reason |
+|---------|--------|
+| Bash support | Zsh only — simplifies everything |
+| Node.js/NVM management | Not a dotfiles concern |
+| Rust/Cargo management | Not a dotfiles concern |
+| Python tooling | Not a dotfiles concern |
+| Custom shell prompt framework | Keep it simple, use lightweight zsh prompt |
+| Alacritty/terminal emulator config | Manage separately |
+| macOS defaults scripts | Too fragile across versions, manage manually |
+| Homebrew cask apps | Install GUI apps manually |
+| VS Code extensions management | VS Code handles this via sync |
+| Remote install script | Complexity not worth it for personal use |
+| Oh My Zsh | 2000+ files, 1000ms+ startup, obscures config |
+| Heavy neovim distros (LazyVim, NvChad) | Defeats simplification goal |
+| Auto-updating dotfiles | Breaks workflows unexpectedly |
+
+## Traceability
+
+Which phases cover which requirements. Updated during roadmap creation.
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| SHL-01 | — | Pending |
+| SHL-02 | — | Pending |
+| SHL-03 | — | Pending |
+| SHL-04 | — | Pending |
+| SHL-05 | — | Pending |
+| SHL-06 | — | Pending |
+| SHL-07 | — | Pending |
+| GIT-01 | — | Pending |
+| GIT-02 | — | Pending |
+| GIT-03 | — | Pending |
+| TMX-01 | — | Pending |
+| TMX-02 | — | Pending |
+| NVM-01 | — | Pending |
+| NVM-02 | — | Pending |
+| INS-01 | — | Pending |
+| INS-02 | — | Pending |
+| INS-03 | — | Pending |
+| INS-04 | — | Pending |
+| PLT-01 | — | Pending |
+| PLT-02 | — | Pending |
+| PLT-03 | — | Pending |
+| STR-01 | — | Pending |
+| STR-02 | — | Pending |
+| STR-03 | — | Pending |
+| CLN-01 | — | Pending |
+| CLN-02 | — | Pending |
+| CLN-03 | — | Pending |
+| CLN-04 | — | Pending |
+| CLN-05 | — | Pending |
+| CLN-06 | — | Pending |
+
+**Coverage:**
+- v1 requirements: 30 total
+- Mapped to phases: 0
+- Unmapped: 30
+
+---
+*Requirements defined: 2026-02-13*
+*Last updated: 2026-02-13 after initial definition*
