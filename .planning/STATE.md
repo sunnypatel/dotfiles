@@ -9,19 +9,19 @@ See: .planning/PROJECT.md (updated 2026-02-13)
 
 ## Current Position
 
-Phase: 4 of 6 (Installation & Cleanup)
-Plan: 1 of 1 in current phase
-Status: Complete
-Last activity: 2026-02-14 — Completed 04-01-PLAN.md (Remove Obsolete Installation Infrastructure)
+Phase: 5 of 6 (CI Validation)
+Plan: 2 of 2 in current phase
+Status: In Progress
+Last activity: 2026-02-14 — Completed 05-01-PLAN.md (CI Infrastructure)
 
-Progress: [██████░░░░] 55%
+Progress: [███████░░░] 61%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 10
-- Average duration: 2.3 minutes
-- Total execution time: 0.39 hours
+- Total plans completed: 11
+- Average duration: 2.2 minutes
+- Total execution time: 0.41 hours
 
 **By Phase:**
 
@@ -31,9 +31,10 @@ Progress: [██████░░░░] 55%
 | 02-stow-package-migration | 4 | 13.0 min | 3.3 min |
 | 03-platform-support | 2 | 3.4 min | 1.7 min |
 | 04-installation-cleanup | 1 | 3.9 min | 3.9 min |
+| 05-ci-validation | 1 | 1.5 min | 1.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-04 (3.0 min), 03-01 (1.4 min), 03-02 (2.0 min), 04-01 (3.9 min)
+- Last 5 plans: 03-01 (1.4 min), 03-02 (2.0 min), 04-01 (3.9 min), 05-01 (1.5 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -51,6 +52,8 @@ Progress: [██████░░░░] 55%
 | Phase 03-platform-support P01 | 82 | 2 tasks | 2 files |
 | Phase 03-platform-support P02 | 122 | 2 tasks | 19 files |
 | Phase 04 P01 | 237 | 2 tasks | 13 files |
+| Phase 05-ci-validation P01 | 90 | 2 tasks | 4 files |
+| Phase 05 P01 | 90 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -87,6 +90,12 @@ Recent decisions affecting current work:
 - [Phase 04]: Add install target as Makefile alias (standard convention)
 - [Phase 04]: Remove 635 lines of obsolete installation code (macOS defaults, remote install, language packages)
 - [Phase 04]: Trim Makefile to under 50 lines while maintaining readability
+- [Phase 05-01]: Use Docker for Ubuntu tests to ensure consistent environment
+- [Phase 05-01]: Use native runners for macOS tests (no Docker support)
+- [Phase 05-01]: BATS test framework for shell-based testing
+- [Phase 05-01]: Use Docker for Ubuntu tests to ensure consistent environment
+- [Phase 05-01]: Use native runners for macOS tests (no Docker support)
+- [Phase 05-01]: BATS test framework for shell-based testing
 
 ### Pending Todos
 
@@ -99,5 +108,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-14
-Stopped at: Completed 04-01-PLAN.md (Remove Obsolete Installation Infrastructure) - Phase 4 complete
+Stopped at: Completed 05-01-PLAN.md (CI Infrastructure)
 Resume file: None
