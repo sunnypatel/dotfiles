@@ -48,6 +48,6 @@ install-packages: install-brew
 		command -v $$cmd >/dev/null 2>&1 || $(BREW_PREFIX)/bin/brew install $$pkg; \
 	done
 stow-packages:
-	stow -R -d $(DOTFILES_DIR)/stow -t $(HOME) zsh git tmux nvim
+	$(BREW_PREFIX)/bin/stow -R -d $(DOTFILES_DIR)/stow -t $(HOME) zsh git tmux nvim
 unlink:
-	stow -d $(DOTFILES_DIR)/stow -t $(HOME) -D zsh git tmux nvim
+	$(BREW_PREFIX)/bin/stow -d $(DOTFILES_DIR)/stow -t $(HOME) -D zsh git tmux nvim
