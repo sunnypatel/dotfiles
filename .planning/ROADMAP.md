@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Platform Support** - Cross-platform detection and installation
 - [ ] **Phase 4: Installation & Cleanup** - Simplified Makefile and final cleanup
 - [ ] **Phase 5: CI Validation** - Automated testing on Ubuntu and macOS
-- [ ] **Phase 6: Documentation** - Updated README and historical record
+- [x] **Phase 6: Documentation** - Updated README and historical record
 
 ## Phase Details
 
@@ -109,8 +109,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 06-01-PLAN.md — Rewrite README.md and remove obsolete REVIEW_AND_RECOMMENDATIONS.md
-- [ ] 06-02-PLAN.md — Create CONTRIBUTING.md and expand REMOVED.md with full phase history
+- [x] 06-01-PLAN.md — Rewrite README.md and remove obsolete REVIEW_AND_RECOMMENDATIONS.md
+- [x] 06-02-PLAN.md — Create CONTRIBUTING.md and expand REMOVED.md with full phase history
 
 ## Progress
 
@@ -124,4 +124,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 3. Platform Support | 2/2 | ✓ Complete | 2026-02-14 |
 | 4. Installation & Cleanup | 1/1 | ✓ Complete | 2026-02-14 |
 | 5. CI Validation | 2/2 | ✓ Complete | 2026-02-14 |
-| 6. Documentation | 0/2 | Not started | - |
+| 6. Documentation | 2/2 | ✓ Complete | 2026-02-14 |
