@@ -25,12 +25,12 @@ endif
 BREW := $(or $(shell command -v brew 2>/dev/null),$(BREW_PREFIX)/bin/brew)
 STOW := $(or $(shell command -v stow 2>/dev/null),$(BREW_PREFIX)/bin/stow)
 
-.PHONY: all install macos linux wsl install-deps install-brew install-packages stow-packages unlink
+.PHONY: all install macos linux wsl install-deps install-brew install-packages stow-packages set-shell unlink
 
 all: $(OS)
 install: all
-macos: install-brew install-packages stow-packages
-linux: install-deps install-brew install-packages stow-packages
+macos: install-brew install-packages stow-packages set-shell
+linux: install-deps install-brew install-packages stow-packages set-shell
 wsl: linux
 
 install-deps:
@@ -51,5 +51,11 @@ install-packages: install-brew
 	done
 stow-packages:
 	$(STOW) -R -d $(DOTFILES_DIR)/stow -t $(HOME) zsh git tmux nvim
+set-shell:
+	@ZSH_PATH=$$(command -v zsh); \
+	if [ "$$SHELL" != "$$ZSH_PATH" ]; then \
+		echo "Changing default shell to zsh..."; \
+		sudo chsh -s "$$ZSH_PATH" "$$USER"; \
+	fi
 unlink:
 	$(STOW) -d $(DOTFILES_DIR)/stow -t $(HOME) -D zsh git tmux nvim
