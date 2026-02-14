@@ -82,7 +82,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 04-01-PLAN.md — Remove obsolete files, create REMOVED.md, finalize Makefile
+- [x] 04-01-PLAN.md — Remove obsolete files, create REMOVED.md, finalize Makefile
 
 ### Phase 5: CI Validation
 **Goal**: Automated testing validates fresh installs on all supported platforms
@@ -95,8 +95,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — CI infrastructure (workflow, Dockerfile, test helpers, Makefile target)
-- [ ] 05-02-PLAN.md — BATS test suite (symlinks, shell config, performance)
+- [x] 05-01-PLAN.md — CI infrastructure (workflow, Dockerfile, test helpers, Makefile target)
+- [x] 05-02-PLAN.md — BATS test suite (symlinks, shell config, performance)
 
 ### Phase 6: Documentation
 **Goal**: Repository is self-explanatory with clear installation and contribution guides
@@ -121,6 +121,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 1. Shell Consolidation | 2/2 | ✓ Complete | 2026-02-14 |
 | 2. Stow Package Migration | 4/4 | ✓ Complete | 2026-02-14 |
 | 3. Platform Support | 2/2 | ✓ Complete | 2026-02-14 |
-| 4. Installation & Cleanup | 0/1 | Not started | - |
-| 5. CI Validation | 0/TBD | Not started | - |
+| 4. Installation & Cleanup | 1/1 | ✓ Complete | 2026-02-14 |
+| 5. CI Validation | 2/2 | ✓ Complete | 2026-02-14 |
 | 6. Documentation | 0/TBD | Not started | - |
