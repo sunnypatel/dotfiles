@@ -31,10 +31,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Tab completion works for common commands without Oh My Zsh dependency
   4. Command history persists across sessions with deduplication
   5. PATH includes platform-aware paths (Homebrew Intel/ARM/Linux locations)
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD
+- [ ] 01-01-PLAN.md — Create consolidated Zsh configuration (.zshenv, .zshrc, .zimrc)
+- [ ] 01-02-PLAN.md — Remove bash config and unused system files, verify setup
 
 ### Phase 2: Stow Package Migration
 **Goal**: Package-per-tool directory structure with XDG-compliant configs
@@ -108,11 +109,11 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Shell Consolidation | 0/TBD | Not started | - |
+| 1. Shell Consolidation | 0/2 | Planned | - |
 | 2. Stow Package Migration | 0/TBD | Not started | - |
 | 3. Platform Support | 0/TBD | Not started | - |
 | 4. Installation & Cleanup | 0/TBD | Not started | - |
