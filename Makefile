@@ -22,6 +22,8 @@ else ifeq ($(UNAME_S),Linux)
     endif
     BREW_PREFIX := /home/linuxbrew/.linuxbrew
 endif
+BREW := $(or $(shell command -v brew 2>/dev/null),$(BREW_PREFIX)/bin/brew)
+STOW := $(or $(shell command -v stow 2>/dev/null),$(BREW_PREFIX)/bin/stow)
 
 .PHONY: all install macos linux wsl install-deps install-brew install-packages stow-packages unlink
 
@@ -38,16 +40,16 @@ ifeq ($(UNAME_S),Linux)
 	fi
 endif
 install-brew:
-	@if ! command -v brew >/dev/null 2>&1 && ! [ -x $(BREW_PREFIX)/bin/brew ]; then \
+	@if ! [ -x $(BREW) ]; then \
 		echo "Installing Homebrew..."; \
 		curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash; \
 	fi
 install-packages: install-brew
 	@for entry in git neovim:nvim tmux stow zsh fzf ripgrep:rg bat; do \
 		pkg=$${entry%%:*}; cmd=$${entry##*:}; \
-		command -v $$cmd >/dev/null 2>&1 || $(BREW_PREFIX)/bin/brew install $$pkg; \
+		command -v $$cmd >/dev/null 2>&1 || $(BREW) install $$pkg; \
 	done
 stow-packages:
-	$(BREW_PREFIX)/bin/stow -R -d $(DOTFILES_DIR)/stow -t $(HOME) zsh git tmux nvim
+	$(STOW) -R -d $(DOTFILES_DIR)/stow -t $(HOME) zsh git tmux nvim
 unlink:
-	$(BREW_PREFIX)/bin/stow -d $(DOTFILES_DIR)/stow -t $(HOME) -D zsh git tmux nvim
+	$(STOW) -d $(DOTFILES_DIR)/stow -t $(HOME) -D zsh git tmux nvim
