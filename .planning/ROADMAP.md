@@ -79,10 +79,10 @@ Plans:
   2. Makefile is under 50 lines with clear targets for macOS and Linux
   3. No macOS defaults scripts, remote install scripts, or language package managers remain
   4. REMOVED.md documents all deleted files with rationale
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] TBD
+- [ ] 04-01-PLAN.md — Remove obsolete files, create REMOVED.md, finalize Makefile
 
 ### Phase 5: CI Validation
 **Goal**: Automated testing validates fresh installs on all supported platforms
@@ -120,6 +120,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 1. Shell Consolidation | 2/2 | ✓ Complete | 2026-02-14 |
 | 2. Stow Package Migration | 4/4 | ✓ Complete | 2026-02-14 |
 | 3. Platform Support | 2/2 | ✓ Complete | 2026-02-14 |
-| 4. Installation & Cleanup | 0/TBD | Not started | - |
+| 4. Installation & Cleanup | 0/1 | Not started | - |
 | 5. CI Validation | 0/TBD | Not started | - |
 | 6. Documentation | 0/TBD | Not started | - |
