@@ -75,20 +75,125 @@ Including language packages couples dotfiles updates to language ecosystem chang
 
 ---
 
-## Earlier Phases (Brief Summary)
+## Phase 3: Platform Support (2026-02-14)
 
-### Phase 1: Shell Consolidation (2026-02-12)
-- Bash configurations removed (switched to Zsh-only)
-- system/.dir_colors removed (integrated into .zshrc for Linux)
+### bin/ Directory
 
-### Phase 2: Stow Package Migration (2026-02-13)
-- config/ directory removed (tool configs migrated to stow packages or removed)
-- .stow-local-ignore removed (packages isolated under stow/ don't need it)
-- Multiple tool configs removed: alacritty, prettier, thefuck, topgrade
+**Files:**
+- `bin/is-macos` - macOS platform detection
+- `bin/is-wsl` - WSL environment detection
+- `bin/is-arm64` - ARM64 architecture detection
+- `bin/is-debian` - Debian distribution detection
+- `bin/is-ubuntu` - Ubuntu distribution detection
+- `bin/is-supported` - Platform support checker
+- `bin/is-executable` - Executable test helper
+- `bin/append` - Append to file utility
+- `bin/dot` - Dotfiles script runner
+- `bin/json` - JSON processing utility
 
-### Phase 3: Platform Support (2026-02-14)
-- bin/ directory removed (platform detection scripts: is-macos, is-wsl, is-arm64, etc.)
-- test/ directory removed (old BATS test infrastructure)
-- All bin/ utility scripts removed (append, dot, json, etc.)
+**Rationale:** Platform detection moved inline using `uname` directly in shell configuration. Every `bin/is-*` script spawned a subprocess - replacing with inline `[[ $(uname -s) == "Darwin" ]]` checks eliminated process overhead. Utility scripts (append, dot, json) were unused.
 
-See git log for complete details: `git log --diff-filter=D --summary`
+Scripts obscured simple operations. `is-macos` was a wrapper around `uname -s`. Direct conditionals are clearer and faster.
+
+**Do not reintroduce:** Use inline platform detection with `uname`. If helper functions are needed, define them in shell config files, not as separate executables.
+
+### Old Test Infrastructure
+
+**Files:**
+- `test/README.md` - Test documentation
+- `test/bin.bats` - Binary utilities tests
+- `test/function.bats` - Function tests
+- `test/installation.bats` - Installation tests
+- `test/os-detection.bats` - Platform detection tests
+- `test/path-config.bats` - PATH configuration tests
+- `test/verify-setup.sh` - Setup verification script
+- `TESTING.md` - Testing guide
+
+**Rationale:** Old test infrastructure replaced with new BATS-based CI tests in Phase 5. Old tests covered functionality that no longer exists (bin/ scripts, installation patterns removed in Phase 4).
+
+**Do not reintroduce:** Current test infrastructure is in `.github/workflows/` with BATS tests. Don't maintain separate test/ directory.
+
+---
+
+## Phase 2: Stow Package Migration (2026-02-13)
+
+### config/ Directory
+
+**Files:**
+- `config/alacritty/alacritty.toml` - Alacritty terminal config
+- `config/alacritty/alacritty.yml` - Alacritty legacy config
+- `config/prettier/.prettierrc` - Code formatter config
+- `config/thefuck/settings.py` - Command correction tool config
+- `config/topgrade.toml` - Update automation config
+
+**Rationale:** XDG-compliant configs migrated to Stow packages under `stow/<tool>/.config/<tool>/`. Tools like alacritty, prettier, thefuck, and topgrade are no longer used. Topgrade tried to be a universal updater but added complexity - manual updates are clearer.
+
+**Do not reintroduce:** Tool configs belong in Stow packages if the tool is actively used. Don't add configs for unused tools.
+
+### Legacy Structure Files
+
+**Files:**
+- `.stow-local-ignore` - Stow ignore patterns
+- `runcom/.zshrc.swp` - Vim swap file
+
+**Rationale:** When all Stow packages moved under `stow/` directory, ignore rules became unnecessary. Each package is isolated. Swap file was accidental commit.
+
+**Do not reintroduce:** Stow packages under `stow/` are self-contained. No ignore file needed.
+
+### Obsolete system/ Directory
+
+**Files:**
+- `system/.alias` - Shell aliases
+- `system/.alias.macos` - macOS-specific aliases
+- `system/.completion` - Shell completions
+- `system/.completion.bash` - Bash completions
+- `system/.completion.zsh` - Zsh completions
+- `system/.env` - Environment variables
+- `system/.env.bash` - Bash environment
+- `system/.env.macos` - macOS environment
+- `system/.env.zsh` - Zsh environment
+- `system/.fix` - Shell fixes
+- `system/.function` - Shell functions
+- `system/.function.macos` - macOS-specific functions
+- `system/.function_fs` - Filesystem functions
+- `system/.function_network` - Network functions
+- `system/.function_text` - Text processing functions
+- `system/.fzf` - FZF configuration
+- `system/.grep` - Grep configuration
+- `system/.java` - Java environment
+- `system/.nvm` - NVM configuration
+- `system/.path` - PATH configuration
+- `system/.prompt` - Shell prompt
+- `system/.zoxide` - Zoxide configuration
+
+**Rationale:** Replaced by modular Zsh config in `stow/zsh/.config/zsh/`. New structure uses `.zsh_aliases`, `.zsh_functions`, `.zsh_path` for clarity. Platform-specific files (`.alias.macos`, `.env.macos`) eliminated - inline conditionals handle platform differences.
+
+Splitting by shell type (.bash, .zsh) created duplication. Zsh-only approach removed this complexity.
+
+**Do not reintroduce:** Use Zsh modular config in ZDOTDIR. Platform detection is inline, not separate files.
+
+---
+
+## Phase 1: Shell Consolidation (2026-02-12)
+
+### Bash Configuration
+
+**Files:**
+- `runcom/.bash_profile` - Bash login shell config
+- `runcom/.bashrc` - Bash interactive shell config
+- `runcom/.inputrc` - Readline input config
+
+**Rationale:** Switched to Zsh-only configuration. Maintaining both Bash and Zsh configs doubled maintenance burden with no benefit. Bash was legacy - all active usage was in Zsh.
+
+Dual-shell support meant testing changes across two environments, handling subtle behavior differences, and maintaining parallel configuration sets.
+
+**Do not reintroduce:** Zsh is the sole shell. If Bash compatibility is required, it's a different project.
+
+### system/.dir_colors
+
+**Files:**
+- `system/.dir_colors` - LS_COLORS configuration
+
+**Rationale:** Integrated inline into `.zshrc` for Linux-only loading via platform conditional. File contained dircolors configuration used only on Linux (macOS uses LSCOLORS). Sourcing inline eliminated extra file while maintaining functionality.
+
+**Do not reintroduce:** Platform-specific configs belong inline with conditionals, not as separate files.
