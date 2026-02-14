@@ -9,19 +9,19 @@ See: .planning/PROJECT.md (updated 2026-02-13)
 
 ## Current Position
 
-Phase: 3 of 6 (Platform Support)
-Plan: 2 of 2 in current phase
+Phase: 4 of 6 (Installation & Cleanup)
+Plan: 1 of 1 in current phase
 Status: Complete
-Last activity: 2026-02-14 — Completed 03-02-PLAN.md (Cleanup Platform Detection Scripts)
+Last activity: 2026-02-14 — Completed 04-01-PLAN.md (Remove Obsolete Installation Infrastructure)
 
-Progress: [█████░░░░░] 50%
+Progress: [██████░░░░] 55%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 9
-- Average duration: 2.2 minutes
-- Total execution time: 0.33 hours
+- Total plans completed: 10
+- Average duration: 2.3 minutes
+- Total execution time: 0.39 hours
 
 **By Phase:**
 
@@ -30,9 +30,10 @@ Progress: [█████░░░░░] 50%
 | 01-shell-consolidation | 2 | 2.9 min | 1.5 min |
 | 02-stow-package-migration | 4 | 13.0 min | 3.3 min |
 | 03-platform-support | 2 | 3.4 min | 1.7 min |
+| 04-installation-cleanup | 1 | 3.9 min | 3.9 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-03 (2.2 min), 02-04 (3.0 min), 03-01 (1.4 min), 03-02 (2.0 min)
+- Last 5 plans: 02-04 (3.0 min), 03-01 (1.4 min), 03-02 (2.0 min), 04-01 (3.9 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -49,6 +50,7 @@ Progress: [█████░░░░░] 50%
 | Phase 02-stow-package-migration P04 | 180 | 2 tasks | 16 files |
 | Phase 03-platform-support P01 | 82 | 2 tasks | 2 files |
 | Phase 03-platform-support P02 | 122 | 2 tasks | 19 files |
+| Phase 04 P01 | 237 | 2 tasks | 13 files |
 
 ## Accumulated Context
 
@@ -82,6 +84,9 @@ Recent decisions affecting current work:
 - [Phase 03-platform-support]: Use $HOME/.local/bin as standard user binary location (replaces $DOTFILES_DIR/bin)
 - [Phase 03-platform-support]: Remove all tool-specific PATH entries out of scope (cargo, pnpm, bun, deno)
 - [Phase 03-platform-support]: Defer new test infrastructure to Phase 5
+- [Phase 04]: Add install target as Makefile alias (standard convention)
+- [Phase 04]: Remove 635 lines of obsolete installation code (macOS defaults, remote install, language packages)
+- [Phase 04]: Trim Makefile to under 50 lines while maintaining readability
 
 ### Pending Todos
 
@@ -94,5 +99,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-14
-Stopped at: Completed 03-02-PLAN.md (Cleanup Platform Detection Scripts) - Phase 3 complete
+Stopped at: Completed 04-01-PLAN.md (Remove Obsolete Installation Infrastructure) - Phase 4 complete
 Resume file: None
