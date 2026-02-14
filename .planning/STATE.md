@@ -5,33 +5,33 @@
 See: .planning/PROJECT.md (updated 2026-02-13)
 
 **Core value:** Every file in this repo should be immediately understandable. If you can't tell what something does in 10 seconds, it doesn't belong here.
-**Current focus:** Phase 2: Stow Package Migration
+**Current focus:** Phase 2 complete. Ready for Phase 3.
 
 ## Current Position
 
 Phase: 2 of 6 (Stow Package Migration)
-Plan: 2 of 4 in current phase
+Plan: 4 of 4 in current phase
 Status: Completed
-Last activity: 2026-02-14 — Completed 02-02-PLAN.md (Git and Tmux Stow Packages)
+Last activity: 2026-02-14 — Completed 02-04-PLAN.md (Cleanup and Stow Package Verification)
 
-Progress: [█░░░░░░░░░] 25%
+Progress: [████░░░░░░] 40%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
-- Average duration: 1.8 minutes
-- Total execution time: 0.10 hours
+- Total plans completed: 7
+- Average duration: 2.3 minutes
+- Total execution time: 0.27 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-shell-consolidation | 2 | 2.9 min | 1.5 min |
-| 02-stow-package-migration | 1 | 2.2 min | 2.2 min |
+| 02-stow-package-migration | 4 | 13.0 min | 3.3 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (2.4 min), 01-02 (0.5 min), 02-03 (2.2 min)
+- Last 5 plans: 02-01 (2.7 min), 02-02 (5.1 min), 02-03 (2.2 min), 02-04 (3.0 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -42,9 +42,10 @@ Progress: [█░░░░░░░░░] 25%
 |------------|--------------|-------|-------|
 | Phase 01-shell-consolidation P01 | 145 | 3 tasks | 3 files |
 | Phase 01-shell-consolidation P02 | 32 | 3 tasks | 28 files |
-| Phase 02 P03 | 133 | 2 tasks | 4 files |
 | Phase 02-stow-package-migration P01 | 161 | 2 tasks | 10 files |
 | Phase 02-stow-package-migration P02 | 306 | 2 tasks | 4 files |
+| Phase 02-stow-package-migration P03 | 133 | 2 tasks | 4 files |
+| Phase 02-stow-package-migration P04 | 180 | 2 tasks | 16 files |
 
 ## Accumulated Context
 
@@ -67,9 +68,10 @@ Recent decisions affecting current work:
 - [Phase 02-stow-package-migration]: Include mason for automatic LSP server installation
 - [Phase 02-stow-package-migration]: Set ZDOTDIR in .zshenv to enable XDG-compliant Zsh config location at ~/.config/zsh/
 - [Phase 02-stow-package-migration]: Source .dir_colors in .zshrc for Linux only (macOS uses LSCOLORS)
-- [Phase 02-stow-package-migration]: Use .stow-local-ignore to prevent symlinking repo infrastructure files
 - [Phase 02-stow-package-migration]: Git editor changed to nvim, delta pager removed, diff/merge tools switched to nvimdiff
 - [Phase 02-stow-package-migration]: Tmux configs migrated to XDG paths (~/.config/tmux/), all gpakosz/.tmux path references updated
+- [Phase 02-stow-package-migration]: All Stow packages under stow/ directory (not repo root) for self-documenting structure
+- [Phase 02-stow-package-migration]: .stow-local-ignore eliminated — packages isolated under stow/ don't need it
 
 ### Pending Todos
 
@@ -82,5 +84,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-14
-Stopped at: Completed 02-stow-package-migration/02-02-PLAN.md (Git and Tmux Stow Packages)
+Stopped at: Completed phase 02-stow-package-migration (all 4 plans)
 Resume file: None
