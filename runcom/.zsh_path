@@ -1,0 +1,49 @@
+###############################################################################
+# .zsh_path - Platform Detection and PATH Configuration
+###############################################################################
+# Sourced by: .zshenv
+# Purpose: Homebrew detection and PATH construction
+###############################################################################
+
+###############################################################################
+# Platform Detection and Homebrew Configuration
+###############################################################################
+
+# Detect platform and set HOMEBREW_PREFIX accordingly
+# macOS: /opt/homebrew (Apple Silicon) or /usr/local (Intel)
+# Linux: /home/linuxbrew/.linuxbrew
+if [[ "$OSTYPE" == darwin* ]]; then
+  if [[ -d /opt/homebrew ]]; then
+    export HOMEBREW_PREFIX="/opt/homebrew"
+  elif [[ -d /usr/local/Homebrew ]]; then
+    export HOMEBREW_PREFIX="/usr/local"
+  fi
+elif [[ -d /home/linuxbrew/.linuxbrew ]]; then
+  export HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
+fi
+
+###############################################################################
+# PATH Construction
+###############################################################################
+
+# typeset -U ensures unique entries (no duplicates)
+typeset -U path
+
+# Build PATH array with priority order (first = highest priority)
+path=(
+  $DOTFILES_DIR/bin
+  $HOME/.cargo/bin
+  $HOME/.local/share/pnpm
+  $HOME/.bun/bin
+  $HOME/.deno/bin
+  ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/bin}
+  ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/sbin}
+  /usr/local/bin
+  /usr/bin
+  /bin
+  /usr/sbin
+  /sbin
+  $path
+)
+
+export PATH

@@ -1,10 +1,9 @@
 ###############################################################################
-# .zshenv - Environment Variables and PATH Configuration
+# .zshenv - Environment Variables
 ###############################################################################
 # Loaded for: ALL shells (interactive, non-interactive, login, non-login)
-# Purpose: PATH, EDITOR, essential environment variables only
+# Purpose: Essential environment variables, sources .zsh_path for PATH
 # Keep minimal - this file runs for every zsh invocation including scripts
-# Source: https://zsh.sourceforge.io/Intro/intro_3.html
 #
 # Load order: .zshenv -> .zprofile -> .zshrc -> .zlogin
 ###############################################################################
@@ -35,46 +34,18 @@ export XDG_STATE_HOME="$HOME/.local/state"
 export LANG="${LANG:-en_US.UTF-8}"
 export LC_ALL="${LC_ALL:-en_US.UTF-8}"
 
-###############################################################################
-# Platform Detection and Homebrew Configuration
-###############################################################################
+# Terminal colors
+export CLICOLOR=1
+export GREP_COLORS='mt=1;32'
+export MANPAGER='less -X'
 
-# Detect platform and set HOMEBREW_PREFIX accordingly
-# macOS: /opt/homebrew (Apple Silicon) or /usr/local (Intel)
-# Linux: /home/linuxbrew/.linuxbrew
+# macOS-specific: increase file descriptor limit
 if [[ "$OSTYPE" == darwin* ]]; then
-  if [[ -d /opt/homebrew ]]; then
-    export HOMEBREW_PREFIX="/opt/homebrew"
-  elif [[ -d /usr/local/Homebrew ]]; then
-    export HOMEBREW_PREFIX="/usr/local"
-  fi
-elif [[ -d /home/linuxbrew/.linuxbrew ]]; then
-  export HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
+  ulimit -S -n 8192
 fi
 
 ###############################################################################
-# PATH Configuration
+# PATH (loaded from separate file for easy editing)
 ###############################################################################
 
-# typeset -U ensures unique entries (no duplicates)
-# Replaces the awk-based deduplication from previous setup
-typeset -U path
-
-# Build PATH array with priority order (first = highest priority)
-path=(
-  $DOTFILES_DIR/bin
-  $HOME/.cargo/bin
-  $HOME/.local/share/pnpm
-  $HOME/.bun/bin
-  $HOME/.deno/bin
-  ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/bin}
-  ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/sbin}
-  /usr/local/bin
-  /usr/bin
-  /bin
-  /usr/sbin
-  /sbin
-  $path
-)
-
-export PATH
+source "${ZDOTDIR:-${0:a:h}}/.zsh_path"

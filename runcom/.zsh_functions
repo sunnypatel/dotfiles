@@ -1,0 +1,16 @@
+###############################################################################
+# .zsh_functions - Shell Functions
+###############################################################################
+# Sourced by: .zshrc
+# Purpose: All custom function definitions in one place
+###############################################################################
+
+# Create directory and cd into it
+mk() {
+  mkdir -p "$@" && cd "$@"
+}
+
+# Calculator
+calc() {
+  echo "$*" | bc -l
+}
