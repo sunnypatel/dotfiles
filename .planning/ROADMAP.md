@@ -106,10 +106,11 @@ Plans:
   1. README explains new structure with installation instructions per platform
   2. REMOVED.md preserves institutional knowledge of what was deleted and why
   3. Contributing guide exists for adding new tools to package structure
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD
+- [ ] 06-01-PLAN.md — Rewrite README.md and remove obsolete REVIEW_AND_RECOMMENDATIONS.md
+- [ ] 06-02-PLAN.md — Create CONTRIBUTING.md and expand REMOVED.md with full phase history
 
 ## Progress
 
@@ -123,4 +124,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 3. Platform Support | 2/2 | ✓ Complete | 2026-02-14 |
 | 4. Installation & Cleanup | 1/1 | ✓ Complete | 2026-02-14 |
 | 5. CI Validation | 2/2 | ✓ Complete | 2026-02-14 |
-| 6. Documentation | 0/TBD | Not started | - |
+| 6. Documentation | 0/2 | Not started | - |
