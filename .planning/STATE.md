@@ -11,17 +11,17 @@ See: .planning/PROJECT.md (updated 2026-02-13)
 
 Phase: 5 of 6 (CI Validation)
 Plan: 2 of 2 in current phase
-Status: In Progress
-Last activity: 2026-02-14 — Completed 05-01-PLAN.md (CI Infrastructure)
+Status: Complete
+Last activity: 2026-02-14 — Completed 05-02-PLAN.md (BATS Test Suite)
 
-Progress: [███████░░░] 61%
+Progress: [███████░░░] 67%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 11
-- Average duration: 2.2 minutes
-- Total execution time: 0.41 hours
+- Total plans completed: 12
+- Average duration: 2.3 minutes
+- Total execution time: 0.46 hours
 
 **By Phase:**
 
@@ -31,10 +31,10 @@ Progress: [███████░░░] 61%
 | 02-stow-package-migration | 4 | 13.0 min | 3.3 min |
 | 03-platform-support | 2 | 3.4 min | 1.7 min |
 | 04-installation-cleanup | 1 | 3.9 min | 3.9 min |
-| 05-ci-validation | 1 | 1.5 min | 1.5 min |
+| 05-ci-validation | 2 | 4.2 min | 2.1 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-01 (1.4 min), 03-02 (2.0 min), 04-01 (3.9 min), 05-01 (1.5 min)
+- Last 5 plans: 03-02 (2.0 min), 04-01 (3.9 min), 05-01 (1.5 min), 05-02 (2.7 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -54,6 +54,7 @@ Progress: [███████░░░] 61%
 | Phase 04 P01 | 237 | 2 tasks | 13 files |
 | Phase 05-ci-validation P01 | 90 | 2 tasks | 4 files |
 | Phase 05 P01 | 90 | 2 tasks | 4 files |
+| Phase 05 P02 | 164 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -96,6 +97,8 @@ Recent decisions affecting current work:
 - [Phase 05-01]: Use Docker for Ubuntu tests to ensure consistent environment
 - [Phase 05-01]: Use native runners for macOS tests (no Docker support)
 - [Phase 05-01]: BATS test framework for shell-based testing
+- [Phase 05-02]: Use zsh-bench with time-based fallback for performance testing
+- [Phase 05-02]: Test aliases and functions in interactive shell (zsh -ic)
 
 ### Pending Todos
 
@@ -108,5 +111,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-14
-Stopped at: Completed 05-01-PLAN.md (CI Infrastructure)
+Stopped at: Completed 05-02-PLAN.md (BATS Test Suite) - Phase 5 complete
 Resume file: None
