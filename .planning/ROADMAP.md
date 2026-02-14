@@ -91,11 +91,12 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. GitHub Actions workflow tests fresh install on Ubuntu and macOS runners
   2. CI validates shell startup time, key aliases, git config, and PATH contents
-  3. Tests run weekly on schedule to catch platform drift
-**Plans**: TBD
+  3. Tests run on push, PR, and manual dispatch
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD
+- [ ] 05-01-PLAN.md — CI infrastructure (workflow, Dockerfile, test helpers, Makefile target)
+- [ ] 05-02-PLAN.md — BATS test suite (symlinks, shell config, performance)
 
 ### Phase 6: Documentation
 **Goal**: Repository is self-explanatory with clear installation and contribution guides
