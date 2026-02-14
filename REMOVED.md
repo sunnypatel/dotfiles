@@ -60,9 +60,18 @@ Including language packages couples dotfiles updates to language ecosystem chang
 - `install/Codefile` (9 lines) - VS Code extensions
 - `install/duti` (91 lines) - File type handlers
 
-**Rationale:** Obsolete infrastructure from pre-Phase-3 setup. Root-level Brewfile (8 packages) replaced install/Brewfile. Casks (GUI apps) managed manually per REQUIREMENTS.md. VS Code extensions managed via VS Code Settings Sync. File associations (duti) require manual setup - auto-configuration is brittle.
+**Rationale:** Obsolete infrastructure from pre-Phase-3 setup. Casks (GUI apps) managed manually per REQUIREMENTS.md. VS Code extensions managed via VS Code Settings Sync. File associations (duti) require manual setup - auto-configuration is brittle.
 
-**Do not reintroduce:** Root Brewfile is canonical. Don't split package management across multiple files.
+**Do not reintroduce:** Don't split package management across multiple files.
+
+### Brewfile
+
+**Files:**
+- `Brewfile` (16 lines) - Root-level Homebrew package list
+
+**Rationale:** Package list moved inline into Makefile's `install-packages` target. Each package is checked against system PATH before installing via Homebrew, avoiding redundant installs (e.g., git already present via apt). Brewfile had no way to express this "skip if system provides it" logic.
+
+**Do not reintroduce:** Makefile is the single source of truth for package installation.
 
 ---
 

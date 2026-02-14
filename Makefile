@@ -43,7 +43,10 @@ install-brew:
 		curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash; \
 	fi
 install-packages: install-brew
-	$(BREW_PREFIX)/bin/brew bundle --file=$(DOTFILES_DIR)/Brewfile
+	@for entry in git neovim:nvim tmux stow zsh fzf ripgrep:rg bat; do \
+		pkg=$${entry%%:*}; cmd=$${entry##*:}; \
+		command -v $$cmd >/dev/null 2>&1 || $(BREW_PREFIX)/bin/brew install $$pkg; \
+	done
 stow-packages:
 	stow -R -d $(DOTFILES_DIR)/stow -t $(HOME) zsh git tmux nvim
 unlink:
