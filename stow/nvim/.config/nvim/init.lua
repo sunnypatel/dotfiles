@@ -65,13 +65,17 @@ vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous diagnosti
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
 
 -- Formatting
-vim.keymap.set('n', '<leader>f', function()
-  vim.cmd(':%!jq .')
-end, { desc = 'Format JSON with jq' })
+local function format_json()
+  local cursor = vim.api.nvim_win_get_cursor(0)
+  vim.cmd('%!jq .')
+  local line_count = vim.api.nvim_buf_line_count(0)
+  cursor[1] = math.min(cursor[1], line_count)
+  vim.api.nvim_win_set_cursor(0, cursor)
+end
+
+vim.keymap.set('n', '<leader>f', format_json, { desc = 'Format JSON with jq' })
 
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = "*.json",
-  callback = function()
-    vim.cmd("%!jq .")
-  end,
+  callback = format_json,
 })
