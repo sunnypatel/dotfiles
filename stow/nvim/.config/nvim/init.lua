@@ -66,10 +66,15 @@ vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" }
 
 -- Formatting
 local function format_json()
+  local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+  local result = vim.fn.systemlist('jq .', table.concat(lines, '\n'))
+  if vim.v.shell_error ~= 0 then
+    vim.notify('jq: invalid JSON', vim.log.levels.WARN)
+    return
+  end
   local cursor = vim.api.nvim_win_get_cursor(0)
-  vim.cmd('%!jq .')
-  local line_count = vim.api.nvim_buf_line_count(0)
-  cursor[1] = math.min(cursor[1], line_count)
+  vim.api.nvim_buf_set_lines(0, 0, -1, false, result)
+  cursor[1] = math.min(cursor[1], vim.api.nvim_buf_line_count(0))
   vim.api.nvim_win_set_cursor(0, cursor)
 end
 
