@@ -31,7 +31,6 @@ require("lazy").setup({
 -- Core Vim Options
 -- ============================================================================
 vim.opt.number = true                -- Show line numbers
-vim.opt.relativenumber = true        -- Relative line numbers
 vim.opt.mouse = "a"                  -- Enable mouse support
 vim.opt.clipboard = "unnamedplus"    -- System clipboard integration
 vim.opt.breakindent = true           -- Wrapped lines respect indent
