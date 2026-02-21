@@ -7,10 +7,19 @@ return {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     config = function()
-      require("nvim-treesitter.configs").setup({
-        ensure_installed = { "lua", "javascript", "typescript", "json", "yaml", "markdown", "bash", "vim", "vimdoc" },
-        highlight = { enable = true },
-        indent = { enable = true },
+      require("nvim-treesitter").setup()
+      -- Install parsers if missing (runs async, no-op if already installed)
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "LazyDone",
+        once = true,
+        callback = function()
+          local ensure = { "lua", "javascript", "typescript", "json", "yaml", "markdown", "bash", "vim", "vimdoc" }
+          local installed = require("nvim-treesitter.config").get_installed()
+          local missing = vim.tbl_filter(function(p) return not vim.tbl_contains(installed, p) end, ensure)
+          if #missing > 0 then
+            require("nvim-treesitter.install").install(missing)
+          end
+        end,
       })
     end,
   },

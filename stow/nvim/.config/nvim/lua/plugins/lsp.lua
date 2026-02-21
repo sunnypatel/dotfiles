@@ -15,26 +15,23 @@ return {
         ensure_installed = { "lua_ls", "ts_ls", "jsonls" },
       })
 
-      local lspconfig = require("lspconfig")
-      local on_attach = function(_, bufnr)
-        local map = function(keys, func, desc)
-          vim.keymap.set("n", keys, func, { buffer = bufnr, desc = "LSP: " .. desc })
-        end
-        map("gd", vim.lsp.buf.definition, "Go to definition")
-        map("gr", vim.lsp.buf.references, "Go to references")
-        map("K", vim.lsp.buf.hover, "Hover documentation")
-        map("<leader>rn", vim.lsp.buf.rename, "Rename symbol")
-        map("<leader>ca", vim.lsp.buf.code_action, "Code action")
-      end
+      -- LSP keymaps via LspAttach autocmd
+      vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(args)
+          local bufnr = args.buf
+          local map = function(keys, func, desc)
+            vim.keymap.set("n", keys, func, { buffer = bufnr, desc = "LSP: " .. desc })
+          end
+          map("gd", vim.lsp.buf.definition, "Go to definition")
+          map("gr", vim.lsp.buf.references, "Go to references")
+          map("K", vim.lsp.buf.hover, "Hover documentation")
+          map("<leader>rn", vim.lsp.buf.rename, "Rename symbol")
+          map("<leader>ca", vim.lsp.buf.code_action, "Code action")
+        end,
+      })
 
-      local servers = { "lua_ls", "ts_ls", "jsonls" }
-      for _, server in ipairs(servers) do
-        lspconfig[server].setup({ on_attach = on_attach })
-      end
-
-      -- Lua LSP needs special config for Neovim API
-      lspconfig.lua_ls.setup({
-        on_attach = on_attach,
+      -- Configure servers using nvim 0.11 native API
+      vim.lsp.config("lua_ls", {
         settings = {
           Lua = {
             runtime = { version = "LuaJIT" },
@@ -43,6 +40,8 @@ return {
           },
         },
       })
+
+      vim.lsp.enable({ "lua_ls", "ts_ls", "jsonls" })
     end,
   },
 

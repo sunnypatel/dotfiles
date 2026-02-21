@@ -25,12 +25,12 @@ endif
 BREW := $(or $(shell command -v brew 2>/dev/null),$(BREW_PREFIX)/bin/brew)
 STOW := $(or $(shell command -v stow 2>/dev/null),$(BREW_PREFIX)/bin/stow)
 
-.PHONY: all install macos linux wsl install-deps install-brew install-packages install-nvm install-pnpm stow-packages set-shell unlink test test-setup
+.PHONY: all install macos linux wsl install-deps install-brew install-packages install-nvm install-pnpm stow-packages set-shell post-install unlink test test-setup
 
 all: $(OS)
 install: all
-macos: install-brew install-packages install-nvm install-pnpm stow-packages set-shell
-linux: install-deps install-brew install-packages install-nvm install-pnpm stow-packages set-shell
+macos: install-brew install-packages install-nvm install-pnpm stow-packages set-shell post-install
+linux: install-deps install-brew install-packages install-nvm install-pnpm stow-packages set-shell post-install
 wsl: linux
 
 install-deps:
@@ -45,7 +45,7 @@ install-brew:
 		curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash; \
 	fi
 install-packages: install-brew
-	@for entry in git neovim:nvim tmux stow zsh fzf ripgrep:rg bat; do \
+	@for entry in git neovim:nvim tmux stow zsh fzf ripgrep:rg bat jq; do \
 		pkg=$${entry%%:*}; cmd=$${entry##*:}; \
 		command -v $$cmd >/dev/null 2>&1 || $(BREW) install $$pkg; \
 	done
@@ -67,6 +67,14 @@ set-shell:
 		echo "Changing default shell to zsh..."; \
 		sudo chsh -s "$$ZSH_PATH" "$$USER"; \
 	fi
+post-install:
+	@echo ""
+	@echo "======================================"
+	@echo "  Dotfiles installed successfully!"
+	@echo "======================================"
+	@echo ""
+	@echo "Log out and back in for zsh to take effect."
+	@echo ""
 unlink:
 	$(STOW) -d $(DOTFILES_DIR)/stow -t $(HOME) -D zsh git tmux nvim
 

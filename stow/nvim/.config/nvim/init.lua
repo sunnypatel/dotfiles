@@ -64,3 +64,6 @@ vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move to right split" })
 -- Diagnostic navigation
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" })
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
+
+-- Formatting
+vim.keymap.set('n', '<leader>f', ':%!jq .<CR>', { desc = 'Format JSON with jq' })
