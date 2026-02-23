@@ -1,273 +1,146 @@
 # Testing Patterns
 
-**Analysis Date:** 2026-02-13
+**Analysis Date:** 2024-07-25
 
 ## Test Framework
 
 **Runner:**
-- BATS (Bash Automated Testing System)
-- All test files located in `test/` directory
-- Test execution via `make test` which runs: `bats test`
-- Config: No separate bats config file; tests are standalone executable scripts
+- **Bats-core** (`bats`)
+- Config: No specific configuration file. `bats` is invoked directly from the command line.
 
 **Assertion Library:**
-- BATS built-in assertions: `[ "$status" -eq 0 ]`, `[[ "$output" =~ pattern ]]`, `[ -f "$file" ]`
-- Return codes checked via `$status` variable set by `run` command
-- Output captured in `$output` variable
-- File/directory existence checks with `[ -x file ]`, `[ -f file ]`, `[ -d dir ]`
+- No separate assertion library is used. Assertions are implemented as custom shell functions within a helper file.
+- Example: `assert_dotfiles_symlink` in `test/test_helper.bash`.
 
 **Run Commands:**
 ```bash
-make test              # Run all tests with bats
-make test-verify       # Run quick verification without bats (uses verify-setup.sh)
-make test-all          # Run both verify and bats tests
-bats test              # Run all test files directly
-bats test/os-detection.bats    # Run specific test file
-bats -v test/os-detection.bats # Verbose output
-bats --tap test/os-detection.bats  # TAP format for CI
+make test              # Installs bats if needed and runs all tests
+bats test/*.bats       # Run all tests directly
 ```
 
 ## Test File Organization
 
 **Location:**
-- All tests in `test/` directory co-located with codebase
-- Test files separate from implementation: `test/` is sibling to `bin/`, `system/`, `runcom/`
+- All test files are located in the `test/` directory.
 
 **Naming:**
-- Pattern: `[feature].bats` for BATS tests
-- Examples: `os-detection.bats`, `path-config.bats`, `bin.bats`, `function.bats`, `installation.bats`
-- Supplementary: `verify-setup.sh` for quick checks without bats dependency
-- Documentation: `README.md` in test directory explains all tests
+- Test files use the `.bats` extension (e.g., `symlinks.bats`, `shell_config.bats`).
 
 **Structure:**
 ```
 test/
-├── os-detection.bats       # OS and architecture detection tests
-├── path-config.bats        # PATH configuration tests
-├── bin.bats                # Binary utility tests (dot, json, is-executable, is-supported)
-├── function.bats           # Shell function tests
-├── installation.bats       # Installation targets and script tests
-├── verify-setup.sh         # Quick verification without bats
-└── README.md               # Testing documentation
+├── shell_config.bats
+├── symlinks.bats
+└── test_helper.bash
 ```
 
 ## Test Structure
 
 **Suite Organization:**
-BATS tests use `@test` declarations with descriptive names:
+- Each `.bats` file acts as a test suite for a specific area of functionality.
+- A common helper file, `test_helper.bash`, is loaded at the beginning of each test file.
 
 ```bash
 #!/usr/bin/env bats
+###############################################################################
+# symlinks.bats - Stow Symlink Validation
+###############################################################################
 
-setup() {
-  # Runs before each test
-  DOTFILES_DIR="$(cd "$(dirname "$BATS_TEST_FILENAME")/.." && pwd)"
-  export PATH="$DOTFILES_DIR/bin:$PATH"
+load test_helper
+
+@test "zsh: ~/.zshenv symlink points to stow/zsh/.zshenv" {
+    assert_dotfiles_symlink "$HOME/.zshenv"
 }
 
-@test "descriptive test name" {
-  run command-to-test
-  [ "$status" -eq 0 ]
+@test "git: ~/.config/git/config symlink points to stow" {
+    assert_dotfiles_symlink "$HOME/.config/git/config"
 }
 ```
 
 **Patterns:**
-
-- **Setup block:** Establishes test environment before each test
-  ```bash
-  setup() {
-    DOTFILES_DIR="$(cd "$(dirname "$BATS_TEST_FILENAME")/.." && pwd)"
-    export PATH="$DOTFILES_DIR/bin:$PATH"
-  }
-  ```
-
-- **Run command pattern:** Executes command and captures output/status
-  ```bash
-  run is-macos
-  [ "$status" -eq 0 ]   # Assert exit code
-  ```
-
-- **Output assertion pattern:** Check captured output
-  ```bash
-  run dot
-  [[ $output =~ "Usage" ]]
-  ```
-
-- **Conditional skip pattern:** Skip test if not applicable
-  ```bash
-  if [ -f /proc/version ]; then
-    run grep -qi microsoft /proc/version
-  else
-    skip "Not on Linux system"
-  fi
-  ```
-
-- **Multiple exit code assertion:** Accept either success or failure
-  ```bash
-  run "$DOTFILES_DIR/bin/is-wsl"
-  [ "$status" -eq 0 ] || [ "$status" -eq 1 ]
-  ```
+- **Setup:** The `load test_helper` command at the top of each test file loads shared functions.
+- **Teardown:** No explicit teardown logic is observed. Tests are designed to be read-only and idempotent where possible.
+- **Assertion:** Assertions are custom helper functions that check a condition and `return 1` on failure, which `bats` interprets as a failed test.
 
 ## Mocking
 
-**Framework:** Not used
+**Framework:**
+- Not used.
 
 **Patterns:**
-- Actual file/command checks instead of mocks: `[ -x "$DOTFILES_DIR/bin/is-macos" ]`
-- Environment variables tested directly: `grep -q "^ID=ubuntu" /etc/os-release`
-- File system state validated: `-f /proc/version`, `-d /home/linuxbrew/.linuxbrew`
-- Test isolation via subshells when needed:
-  ```bash
-  source "$DOTFILES_DIR/system/.path"
-  # Subshell sourcing in subshell: ( source file ) or $(source file)
-  ```
+- Mocking is not applicable for this test suite, as the tests are integration tests that verify the real state of the filesystem (symlinks, file existence) after the dotfiles are "installed".
 
 **What to Mock:**
-- Not applicable; codebase uses real files and environment variables
-- Tests verify actual detection logic by checking system files directly
+- Not applicable.
 
 **What NOT to Mock:**
-- OS detection: scripts check real `/proc/version` and `$OSTYPE`
-- Path configuration: tests source actual shell files
-- Installation targets: tests verify Makefile targets exist (not executed, just verified)
+- The filesystem and symlink targets are the subjects of the tests and are not mocked.
 
 ## Fixtures and Factories
 
 **Test Data:**
-```bash
-# From function.bats
-FIXTURE=$'foo\nbar\nbaz\nfoo'
-FIXTURE_TEXT="foo"
+- Test data is hardcoded into the tests themselves, usually as paths to files that are expected to exist.
+- There are no external fixture files.
 
-@test "get" {
-  ACTUAL=$(get "FIXTURE_TEXT")
-  EXPECTED="foo"
-  [ "$ACTUAL" = "$EXPECTED" ]
+```bash
+# From test/symlinks.bats
+@test "all expected symlinks exist" {
+    local symlinks=(
+        "$HOME/.zshenv"
+        "$HOME/.config/zsh/.zshrc"
+        # ... and so on
+    )
+    # ... logic to check symlinks
 }
 ```
 
 **Location:**
-- Inline in test file: Variables declared at top of test file or in setup()
-- Example: `FIXTURE`, `FIXTURE_TEXT` defined at test file scope
-- No separate fixture files; test data embedded in test scripts
+- Not applicable.
 
 ## Coverage
 
-**Requirements:** No coverage enforcement configured
+**Requirements:**
+- No coverage metrics are configured or enforced. The focus is on integration testing of key paths.
 
 **View Coverage:**
-- Not configured; no coverage tool set up
-- All test areas documented in TESTING.md: 5 test files covering 5 feature areas
-- Coverage includes:
-  - OS detection (is-macos, is-wsl, is-ubuntu, is-debian, is-arm64)
-  - Path configuration (HOMEBREW_PREFIX, WSL paths, dotfiles bin)
-  - Binary utilities (dot, json, is-executable, is-supported)
-  - Shell functions (ps0, ps1, ps2, get, calc, line, duplines, uniqlines)
-  - Installation process (Makefile targets, remote-install.sh, detection scripts)
+- Not applicable.
 
 ## Test Types
 
 **Unit Tests:**
-- Scope: Individual shell scripts and functions
-- Approach: Direct execution via `run` command, assertion on exit code
-- Examples: `test/os-detection.bats` tests each `is-*` script independently
-- Assertion style: Exit code validation and output pattern matching
-- File from codebase: `test/os-detection.bats` (lines 12-76) tests 5 detection utilities
+- Not present. The testing approach does not lend itself to traditional unit tests.
 
 **Integration Tests:**
-- Scope: Multiple components working together (PATH configuration with detection scripts)
-- Approach: Source shell files and verify resulting state
-- Example from `test/path-config.bats`:
-  ```bash
-  @test "WSL paths added when on WSL" {
-    source "$DOTFILES_DIR/system/.path"
-    if "$DOTFILES_DIR/bin/is-wsl" > /dev/null 2>&1; then
-      run echo "$PATH" | grep -q "/mnt/c/Windows/System32"
-      [ "$status" -eq 0 ]
-    else
-      skip "Not running on WSL"
-    fi
-  }
-  ```
-- Makefile integration: Verify targets call correct dependencies
+- This is the primary form of testing used. The entire test suite functions as integration tests.
+- **Scope:** They verify that `stow` correctly creates symlinks from the `stow/` directory to the `$HOME` directory, ensuring the dotfiles are correctly "installed". They test the integration between the `stow` utility and the repository's file structure.
 
 **E2E Tests:**
-- Framework: Not used
-- Manual testing documented: `test/verify-setup.sh` provides quick smoke tests
-- `verify-setup.sh` pattern:
-  ```bash
-  test_check() {
-    local name="$1"
-    local command="$2"
-    if eval "$command" > /dev/null 2>&1; then
-      echo "✓ $name"
-      ((PASSED++))
-      return 0
-    else
-      echo "✗ $name"
-      ((FAILED++))
-      return 1
-    fi
-  }
-  ```
+- Not used.
 
 ## Common Patterns
 
 **Async Testing:**
-- Not applicable (synchronous shell execution)
+- Not used.
 
 **Error Testing:**
-```bash
-@test "is-executable (false)" {
-  run is-executable nonexistent
-  [ "$status" -eq 1 ]
-}
+- Error conditions are tested by checking for the non-existence of a file or symlink and failing the test if it's missing.
 
-@test "is-supported (false)" {
-  run is-supported "ls --nonexistent"
-  [ "$status" -eq 1 ]
+```bash
+# From test/symlinks.bats
+@test "all expected symlinks exist" {
+    local missing=()
+    for symlink in "${symlinks[@]}"; do
+        [ -L "$symlink" ] || missing+=("$symlink")
+    done
+    
+    if [ ${#missing[@]} -gt 0 ]; then
+        echo "Missing symlinks:"
+        printf '%s\n' "${missing[@]}"
+        return 1
+    fi
 }
 ```
-
-**Platform-Conditional Testing:**
-```bash
-@test "is-macos detects macOS correctly" {
-  run [ -x "$DOTFILES_DIR/bin/is-macos" ]
-  [ "$status" -eq 0 ]
-}
-```
-
-**Output Validation:**
-```bash
-@test "json" {
-  ACTUAL=$(echo '{"x":1}' | json)
-  EXPECTED=$'{ "x": 1 }'
-  [ "$ACTUAL" = "$EXPECTED" ]
-}
-```
-
-## Test Execution
-
-**Environment Setup:**
-- DOTFILES_DIR derived from test file location: `DOTFILES_DIR="$(cd "$(dirname "$BATS_TEST_FILENAME")/.." && pwd)"`
-- PATH prepended with dotfiles bin: `export PATH="$DOTFILES_DIR/bin:$PATH"`
-- Repeat for each test via `setup()` function
-
-**Sourcing in Tests:**
-- Load functions: `load "../system/.function"` in `test/function.bats`
-- Source complete files: `source "$DOTFILES_DIR/system/.path"` to test state changes
-- Subshell isolation when needed to prevent environment pollution
-
-**Skip Conditions:**
-- Platform-specific tests skip gracefully:
-  ```bash
-  if ./bin/is-wsl; then
-    # test WSL-specific behavior
-  else
-    skip "Not running on WSL"
-  fi
-  ```
 
 ---
 
-*Testing analysis: 2026-02-13*
+*Testing analysis: 2024-07-25*

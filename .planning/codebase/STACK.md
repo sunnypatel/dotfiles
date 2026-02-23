@@ -1,157 +1,69 @@
 # Technology Stack
 
-**Analysis Date:** 2026-02-13
+**Analysis Date:** 2024-07-25
 
 ## Languages
 
 **Primary:**
-- Bash - System configuration, shell scripts, automation in `runcom/`, `system/`, `bin/`, `install/`, and `Makefile`
-- Zsh - Shell configuration via Zim framework in `runcom/.zshrc` with `config/` terminal config
-- Python - Limited use for specific tool configuration in `config/thefuck/settings.py`
+- Shell (Bash/Zsh) - Used for all scripts, configuration, and setup logic.
+- Makefile - Used as the main task runner for installation and testing.
 
 **Secondary:**
-- Shell/POSIX - Portable shell scripts for cross-platform OS detection in `bin/`
+- Lua - Used for Neovim configuration in `stow/nvim/.config/nvim/init.lua`.
 
 ## Runtime
 
 **Environment:**
-- macOS (13+, 14, 15 with Apple Silicon and Intel support)
-- Linux (Ubuntu/Debian tested, WSL2 supported)
-- Windows Subsystem for Linux (WSL2)
+- The scripts are designed to run on Unix-like shells (Zsh and Bash) on multiple OSs.
+- Supported OS: macOS (Intel/ARM), Linux, and WSL2.
+- Node.js is managed via `nvm` (Node Version Manager), as specified in the `Makefile`.
 
 **Package Manager:**
-- Homebrew (macOS and Linux via Linuxbrew) - Primary package manager
-- APT (Linux/WSL) - System package manager for Ubuntu/Debian
-- npm (via Node Version Manager) - JavaScript packages
-- Cargo (Rust) - Rust binaries
-- Lockfile: Not applicable (package lists in text files)
+- Homebrew (`brew`) - Used to install system-level dependencies like `git`, `stow`, `neovim`, etc.
+- NVM (`nvm`) - Used to manage Node.js versions. The `Makefile` includes an installation step for it.
+- pnpm - The `Makefile` includes an installation step for this package manager, suggesting it's used for Node.js projects.
+- Zim (`zim`) - Used as a framework manager for Zsh, configured in `stow/zsh/.zimrc`.
 
 ## Frameworks
 
 **Core:**
-- Zim - `1.x` - Zsh framework/module system sourced in `runcom/.zshrc`
-- GNU Stow - Configuration file symlink management in Makefile targets (`make link`, `make unlink`)
+- GNU Stow - Used for managing dotfiles by symlinking them from the `stow/` directory to the home directory.
+- Zim - A Zsh configuration framework for managing plugins and themes.
+
+**Testing:**
+- Bats (`bats-core`) - A "Bash Automated Testing System" used for testing shell scripts. Test files are located in `test/*.bats`.
 
 **Build/Dev:**
-- Make - Makefile-based orchestration in `Makefile` for installation, testing, and updates
-- BATS (Bash Automated Testing System) - Test framework in `test/` directory for unit and integration tests
-
-**Version Management:**
-- nvm (Node Version Manager) - Node.js version management with lazy loading in `system/.nvm`
-- Rustup - Rust toolchain management
+- GNU Make - Used as the primary task runner for commands like `install`, `test`, and `unlink`.
+- Docker - Used in the CI pipeline to create a reproducible testing environment for Ubuntu. The configuration is in `.github/Dockerfile.ubuntu`.
 
 ## Key Dependencies
 
-**Critical for Installation:**
-- coreutils - GNU core utilities (installed via Homebrew)
-- bash 5+ - Modern Bash features for scripting
-- git - Version control and Git utilities via `install/Brewfile`
-- curl - Remote script downloading in Makefile targets
-- stow - Symlink management via GNU Stow in `Makefile`
+**Critical:**
+- `stow`: The core tool for symlinking the dotfiles.
+- `zsh`: The target shell environment.
+- `git`: For version control and interacting with git repositories.
+- `homebrew`: For installing all other dependencies.
 
-**Shell Enhancement:**
-- zimfw (Zsh plugin manager) - Zim framework auto-installation in `runcom/.zshrc`
-- fzf - Fuzzy finder sourced in `system/.fzf`
-- zoxide - Directory jumping sourced in `system/.zoxide`
-- git-delta - Enhanced diff viewer configured in `config/git/config`
-
-**Development Tools:**
-- ripgrep (rg) - Fast grep alternative
-- fd - Fast find alternative
-- bat - Syntax-highlighted cat replacement
-- shellcheck - Shell script linting
-- prettier - Code formatter configured in `config/prettier/.prettierrc`
-- topgrade - Universal package manager updater used in `bin/dot`
-
-**Runtime/CLI:**
-- jq - JSON query processor
-- httpie - HTTP client
-- imagemagick - Image processing
-- ffmpeg - Media processing
-- thefuck - Command correction
-- tmux - Terminal multiplexer configuration in `config/tmux/tmux.conf`
-
-**Rust Utilities:**
-- cargo-cache - Rust build cache management
-- cargo-update - Cargo crate updates
-- jless - JSON viewer
-
-**Node.js Utilities:**
-- @antfu/ni - Universal package manager runner
-- pnpm - JavaScript package manager
-- yarn - JavaScript package manager
-- npm-check-updates - Update checker
-- release-it - Release automation
-- remark-cli - Markdown processor
-- svgo - SVG optimization
-- prettier - Code formatter
+**Infrastructure:**
+- `make`: For running installation and testing tasks defined in the `Makefile`.
+- `bats-core`: For running the test suite.
 
 ## Configuration
 
 **Environment:**
-- XDG Base Directory Specification compliance in `system/.env`:
-  - `$XDG_CONFIG_HOME` → `~/.config`
-  - `$XDG_DATA_HOME` → `~/.local/share`
-  - `$XDG_CACHE_HOME` → `~/.cache`
-  - `$XDG_STATE_HOME` → `~/.local/state`
-  - `$XDG_RUNTIME_DIR` → `~/.local/runtime` (macOS only, managed by systemd on Linux)
+- Configuration is managed through files in the `stow/` directory which are symlinked into the `$HOME` directory.
+- Key configuration files include `.zshenv`, `.zshrc`, `.zsh_aliases`, `git/config`, and `tmux.conf`.
 
-- Locale Configuration: `en_US.UTF-8` or `C.UTF-8` fallback with generation support in `system/.env`
-
-- History Configuration:
-  - `HISTSIZE`: 32768 entries
-  - `SAVEHIST`: 4096 (Zsh)
-  - `HISTCONTROL`: ignoredups:erasedups
-
-**Build Configuration:**
-- Makefile targets in `/home/sunny/projects/dotfiles/Makefile`:
-  - `make macos` - Install on macOS
-  - `make linux` - Install on Linux
-  - `make wsl` - Install on WSL
-  - `make link` - Create symlinks via Stow
-  - `make test` - Run tests with bats
-
-**Code Formatting:**
-- EditorConfig in `.editorconfig`:
-  - UTF-8 charset
-  - LF line endings
-  - 2-space indentation
-  - Final newline required
-  - Trim trailing whitespace
-
-- Prettier in `config/prettier/.prettierrc`:
-  - 120 character print width
-  - Single quotes for strings
-  - Avoid parens on arrow functions
-  - Bracket on same line (JSX)
-
-**Git Configuration:**
-- Delta as diff pager in `config/git/config`
-- VSCode as merge tool and editor
-- GPG signing optional
-- Extensive git aliases configured in `config/git/config`
+**Build:**
+- `Makefile`: Defines the build and installation logic.
+- `.github/Dockerfile.ubuntu`: Defines the Docker build for the CI environment.
 
 ## Platform Requirements
 
 **Development:**
-- macOS: Xcode Command Line Tools (includes git, make)
-- Linux: build-essential, curl, git, make
-- WSL2: Windows Subsystem for Linux with Ubuntu distro
-
-**Supported macOS Versions:**
-- macOS 13 (Ventura)
-- macOS 14 (Sonoma)
-- macOS 15 (Sequoia)
-- Both Apple Silicon (M1+) and Intel architectures
-
-**Supported Linux:**
-- Ubuntu (latest tested)
-- Debian
-- WSL2 with auto-detection
+- A Unix-like environment (macOS, Linux, WSL2).
+- `curl` and `git` are required for the installation script to work.
 
 **Production:**
-- Not a production application - personal dotfiles for development environments
-
----
-
-*Stack analysis: 2026-02-13*
+- This is a development environment configuration, not a deployable application. "Production" is the user's local machine.

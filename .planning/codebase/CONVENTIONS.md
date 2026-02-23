@@ -1,139 +1,119 @@
 # Coding Conventions
 
-**Analysis Date:** 2026-02-13
+**Analysis Date:** 2024-07-25
 
 ## Naming Patterns
 
 **Files:**
-- Shell scripts with shebang: `#!/usr/bin/env bash` convention used throughout
-- Utility scripts in `bin/` are lowercase with hyphens: `is-macos`, `is-wsl`, `is-ubuntu`, `is-debian`, `is-arm64`, `is-executable`, `is-supported`
-- Configuration files in `system/` are dot-prefixed: `.alias`, `.completion`, `.env`, `.function`, `.path`, `.prompt`
-- Configuration files use platform-specific suffixes: `.macos`, `.bash`, `.zsh` (e.g., `.alias.macos`, `.env.bash`)
-- Installation files in `install/` are uppercase: `Brewfile`, `Caskfile`, `Codefile`, `Rustfile`, `npmfile`
-- Test files use `.bats` extension: `os-detection.bats`, `path-config.bats`, `bin.bats`, `function.bats`, `installation.bats`
+- Shell configuration files are prefixed with a dot and organized by purpose (e.g., `.zshrc`, `.zsh_aliases`, `.zsh_functions`).
+- Test files use the `.bats` extension (e.g., `symlinks.bats`).
+- Helper scripts use `.bash` (e.g., `test_helper.bash`).
+- Task definitions are in `Makefile`.
 
 **Functions:**
-- Snake_case for function definitions: `sub_help()`, `sub_clean()`, `sub_dock()`, `sub_edit()`, `sub_test()`, `sub_update()`, `sub_duti()`, `sub_macos()` in `bin/dot`
-- Lowercase with hyphens for bash functions: `prepend-path()` in `system/.path`, `ps0()`, `ps1()`, `ps2()`, `calc()`, `meteo()` in `system/.function`
-- Utility functions are prefixed with descriptive names: `is-*` for boolean checks, `sub_*` for subcommand handlers
+- Lower-case, `snake_case` is preferred for shell functions.
+- Examples: `command_exists`, `skip_if_not_macos` in `test/test_helper.bash`.
+- Short, verb-based names are also used for simple utilities (e.g., `mk`, `calc` in `stow/zsh/.config/zsh/.zsh_functions`).
 
 **Variables:**
-- UPPERCASE_WITH_UNDERSCORES for environment variables: `DOTFILES_DIR`, `PATH`, `HOMEBREW_PREFIX`, `XDG_CONFIG_HOME`, `STOW_DIR`, `NVM_DIR`, `ACCEPT_EULA`, `GITHUB_ACTION`
-- Local variables in functions use lowercase_with_underscores: `BIN_NAME`, `COMMAND_NAME`, `SUB_COMMAND_NAME`, `FIXTURE`, `FIXTURE_TEXT`, `OPT_COLOR`, `PASSED`, `FAILED`, `LOCALE`, `LOCATION`
-- Command substitution assigned to uppercase: `ACTUAL=$(command)`, `EXPECTED=$'string'`, `DOTFILES_DIR="$(cd "$(dirname "$0")"/.. && pwd)"`
+- Environment-style variables are `UPPER_CASE` (e.g., `HISTFILE`, `ZIM_HOME` in `stow/zsh/.config/zsh/.zshrc`).
+- Local variables within functions are typically `lower_case` (e.g., `symlink_path` in `test/test_helper.bash`).
+- Variables are consistently quoted when used (e.g., `"$@"`).
 
 **Types:**
-- Not applicable (bash script codebase)
+- Not applicable for this shell-based project.
 
 ## Code Style
 
 **Formatting:**
-- EditorConfig used as primary formatting standard: file `.editorconfig`
-- 2-space indentation throughout (configured in `.editorconfig`)
-- UTF-8 charset required
-- Unix line endings (LF) enforced
-- Final newline required on all files
-- Trailing whitespace trimmed
+- Enforced via `.editorconfig`:
+  - `indent_style = space`
+  - `indent_size = 2`
+  - `end_of_line = lf`
+  - `charset = utf-8`
+  - `trim_trailing_whitespace = true`
+  - `insert_final_newline = true`
 
 **Linting:**
-- ShellCheck configured for bash script linting (referenced in Makefile as `apt-get install shellcheck`)
-- Scripts must pass ShellCheck validation before commit
+- No automated linter (like ShellCheck) is configured in the repository's tooling.
+- Style is maintained by convention.
 
 ## Import Organization
 
 **Order:**
-- Not applicable (bash sourcing, not module imports)
-
-**Sourcing:**
-- Environment variables and paths loaded first (`.env`, `.path` in shell rc files)
-- Shell functions loaded with `load` statement in bats tests: `load "../system/.function"`
-- Subshell sourcing used in tests to avoid polluting environment: `source "$DOTFILES_DIR/system/.path"` within `()` or subshells
+- Shell scripts use `source` to include other files. The main entry point `stow/zsh/.config/zsh/.zshrc` sources dependencies in a specific order:
+    1. Zimfw (plugin manager) init script
+    2. `.zsh_aliases`
+    3. `.zsh_functions`
 
 **Path Aliases:**
-- Shell aliases defined in `system/.alias`, platform-specific in `system/.alias.macos`
-- Environment setup in `system/.env` with platform variants (`.env.bash`, `.env.zsh`, `.env.macos`)
+- Not applicable in the same way as a JS/TS project. `ZDOTDIR` is used to establish a base path for zsh configuration files.
 
 ## Error Handling
 
 **Patterns:**
-- Exit codes for boolean utilities: `exit 0` for success/true, `exit 1` for failure/false in all `is-*` scripts
-- Command substitution with error redirection: `$(command 2>&1)` or `$(command > /dev/null 2>&1)`
-- Conditional execution with `||` and `&&`: `is-executable brew || curl ... | bash` (install if not exists)
-- Test assertions wrapped in `[ ]` or `[[ ]]` with status checks: `[ "$status" -eq 0 ]`, `[ "$status" -ne 0 ]`
-- Error suppression common: `eval "$1" > /dev/null 2>&1` in `is-supported`, `"$DOTFILES_DIR/bin/is-wsl" > /dev/null 2>&1`
-- Makefile error handling with `|| true`: `brew bundle --file=... || true` to continue on non-critical failures
-- Conditional blocks with shell-specific syntax: `@if ! locale -a | grep -q "en_US.utf8"` in Makefile with platform detection
+- **Command Checks:** Scripts frequently check for the existence of a command before using it, especially in the `Makefile`.
+  ```bash
+  # From Makefile
+  @if ! command -v gcc >/dev/null 2>&1; then ...
+  ```
+- **File Checks:** Scripts check for file or directory existence before proceeding.
+  ```bash
+  # From stow/zsh/.config/zsh/.zshrc
+  if [[ ! -e ${ZIM_HOME}/zimfw.zsh ]]; then ...
+  ```
+- **Test Failures:** BATS tests fail by returning a non-zero exit code (`return 1`).
 
 ## Logging
 
-**Framework:** Bash builtins and echo
+**Framework:** `echo` command.
 
 **Patterns:**
-- Simple echo for user-facing messages: `echo "Usage: $BIN_NAME <command>"`, `echo "$ command"` to show what's running
-- Status messages with icons: `echo "✓ $name"` and `echo "✗ $name"` in `test/verify-setup.sh`
-- Debug output to stderr: `echo "..."` piped to stderr or suppressed with `> /dev/null 2>&1`
-- Test output: bats framework handles all output with `@test` declarations
-- Makefile echo: `@echo "..."` with `@` prefix to suppress command echo (example: `@echo "Running full test suite with bats..."`)
-- Subcommand messages: In `bin/dot`, output explains what's happening: `echo "Applying ${DEFAULTS_FILE}"`, `echo "Done. Some changes may require..."`
+- Informational messages are printed to stdout during installation via the `Makefile`.
+  ```makefile
+  # From Makefile
+  @echo "Installing NVM..."; \
+  ```
+- Test failures in BATS also use `echo` to provide context before returning an error.
 
 ## Comments
 
 **When to Comment:**
-- Shebang as first line of all scripts: `#!/usr/bin/env bash`
-- Section separators with comment blocks: `# [Task name]` in `system/.function` (e.g., `# Switch long/short prompt`, `# Get named var`, `# Calculator`)
-- Complex logic explained inline: `# Detect if running in WSL (Windows Subsystem for Linux)` in `bin/is-wsl`
-- Multi-method detection documented: `# Checks multiple methods to reliably detect WSL`
-- Setup/teardown documented in tests: `# Get the directory where the dotfiles are located` in `setup()` blocks
-- Test purpose documented: `# Tests for OS detection utilities`
-- Conditional logic explained when non-obvious: `# Prefer repository bin over system binaries (e.g., graphviz 'dot')` in `bin/dot`
+- File headers are used extensively to describe the purpose of the file and how it's sourced.
+- Important or complex blocks of code are preceded by a comment.
+- Comments explain platform-specific logic (e.g., macOS vs. Linux).
 
-**JSDoc/TSDoc:**
-- Not used (bash shell scripts)
+**Style:**
+- A block of `#` characters is used to create a large, visible header at the top of shell files.
+  ```bash
+  ###############################################################################
+  # .zsh_aliases - Shell Aliases
+  ###############################################################################
+  # Sourced by: .zshrc
+  # Purpose: All alias definitions in one place
+  ###############################################################################
+  ```
 
 ## Function Design
 
 **Size:**
-- Functions kept focused and small: `is-macos` is 7 lines, `is-wsl` is 14 lines
-- Utility functions under 15 lines typically
-- Exception: `bin/dot` main dispatcher is ~80 lines but uses subcommand pattern for clarity
+- Functions are small and have a single responsibility.
+- Example: `mk()` in `stow/zsh/.config/zsh/.zsh_functions` creates a directory and cds into it.
 
 **Parameters:**
-- Positional parameters used: `$1`, `$2` for command name and subcommand
-- Optional flags via getopts: `: getopts ":c" OPT` in `bin/json` for `-c` color flag
-- Arguments passed through with `$@`: `sub_${COMMAND_NAME} $@` in `bin/dot`
-- Environment variables preferred over parameters for configuration
+- Parameters are accessed using `$1`, `$@`, etc. and are always quoted.
 
 **Return Values:**
-- Exit codes (0/1) for boolean functions
-- Output via stdout for data-returning functions: `echo -n "$2"` or `echo -n "$3"` in `is-supported`
-- No explicit return statements in most functions, relies on last command exit code
+- Functions primarily return status via exit codes (0 for success, non-zero for failure). Output is written to stdout.
 
 ## Module Design
 
 **Exports:**
-- Environment variables explicitly exported: `export DOTFILES_DIR`, `export PATH`, `export HOMEBREW_PREFIX`
-- Functions sourced via `load` in tests, no explicit export needed for bats
-- Global environment modification expected: scripts modify PATH, set environment variables globally
+- Not applicable in the traditional sense. Function and alias definitions are made available to the shell session by `source`-ing the relevant files.
 
 **Barrel Files:**
-- Configuration files act as entry points: `runcom/.bash_profile`, `runcom/.zshrc` source multiple system files
-- Example from shell init pattern:
-  ```bash
-  source "$DOTFILES_DIR/system/.path"
-  source "$DOTFILES_DIR/system/.env"
-  source "$DOTFILES_DIR/system/.alias"
-  ```
-- Test files group related tests: `test/os-detection.bats`, `test/path-config.bats` organized by feature
-- Load statements in tests import dependencies: `load "../system/.function"` imports utility functions
-
-## Testing Integration Points
-
-**Shell Configuration Loading:**
-- Scripts assume DOTFILES_DIR is set or derive it: `DOTFILES_DIR="$(cd "$(dirname "$0")"/.. && pwd)"`
-- Platform detection is critical: functions check `is-macos`, `is-wsl`, `is-ubuntu`, `is-debian`, `is-arm64`
-- Path setup depends on correct OS detection and Homebrew location discovery
-- Test isolation via subshells to prevent environment pollution
+- `.zshrc` acts as a "barrel file" by sourcing `.zsh_aliases` and `.zsh_functions` to aggregate shell configurations.
 
 ---
 
-*Convention analysis: 2026-02-13*
+*Convention analysis: 2024-07-25*

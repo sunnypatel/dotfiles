@@ -1,177 +1,89 @@
 # Architecture
 
-**Analysis Date:** 2026-02-13
+**Analysis Date:** 2024-07-25
 
 ## Pattern Overview
 
-**Overall:** Multi-platform shell configuration management system with platform detection, modular configuration sourcing, and declarative package installation.
+**Overall:** **Declarative Dotfiles Management via Stow and Make**
+
+This project uses a combination of GNU Stow and a `Makefile` to manage and deploy configuration files (dotfiles) in a structured, repeatable, and platform-aware manner. The core idea is to separate configurations into logical "packages" which are then symlinked into the home directory.
 
 **Key Characteristics:**
-- **Platform-aware**: Automatic detection and conditional setup for macOS, Linux, WSL, and architecture (Intel/ARM)
-- **Modular sourcing**: Configuration split into focused files, selectively sourced based on context
-- **Declarative package management**: Package lists stored as manifest files, applied via Makefile orchestration
-- **Symlink-based distribution**: GNU Stow manages symlinks from repo to home directory and XDG config locations
-- **Shell-agnostic core**: Base configuration works with bash and zsh; framework-specific features added conditionally
+- **Modular:** Configurations are grouped by application (e.g., `git`, `nvim`) into packages.
+- **Declarative:** The `Makefile` declares the desired state (dependencies, installed packages), and running `make` converges the system to that state.
+- **Idempotent:** The `stow-packages` command uses the `-R` flag (`--restow`), ensuring that running the installation multiple times has a consistent and non-destructive result.
+- **Portable:** The `Makefile` includes logic to detect the operating system (`Linux`, `macOS`, `WSL`) and adapt the installation process, primarily for dependency management via Homebrew.
 
 ## Layers
 
-**Entry Point / Initialization Layer:**
-- Purpose: Bootstrap shell environment and establish paths
-- Location: `runcom/.bash_profile` (bash), `runcom/.zshrc` (zsh)
-- Contains: DOTFILES_DIR resolution, initial PATH setup, sourcing orchestration
-- Depends on: `bin/` detection utilities, `system/` configuration files
-- Used by: Shell processes at startup
+**Orchestration Layer:**
+- **Purpose**: Provides a high-level interface for managing the dotfiles lifecycle.
+- **Location**: `Makefile`
+- **Contains**: `make` targets for installation (`install`), removal (`unlink`), and testing (`test`).
+- **Depends on**: System commands (`uname`, `grep`), Homebrew, and Stow.
+- **Used by**: The user/developer.
 
-**Detection & Platform Layer:**
-- Purpose: Determine OS type, distribution, architecture for conditional setup
-- Location: `bin/is-macos`, `bin/is-wsl`, `bin/is-ubuntu`, `bin/is-debian`, `bin/is-arm64`, `bin/is-supported`, `bin/is-executable`
-- Contains: Exit-code-based detection scripts (0 for true, 1 for false)
-- Depends on: System files (`/proc/version`, environment variables, `$OSTYPE`)
-- Used by: Makefile, shell initialization, conditional feature loading
+**Packaging (Module) Layer:**
+- **Purpose**: Organizes configuration files into self-contained modules.
+- **Location**: `stow/`
+- **Contains**: Subdirectories for each application (`zsh`, `git`, `tmux`, `nvim`).
+- **Depends on**: N/A
+- **Used by**: The Orchestration Layer (`Makefile` passes these package names to `stow`).
 
 **Configuration Layer:**
-- Purpose: Define environment variables, functions, aliases, and behavior
-- Location: `system/` directory with modular `.dotfiles` files
-- Contains: Grouped by concern: `.env*`, `.alias*`, `.function*`, `.path`, `.completion*`, `.fzf`, `.grep`, `.prompt`, `.fix`, `.zoxide`
-- Depends on: Detection layer for conditional sourcing
-- Used by: Shell sessions for interactive features
+- **Purpose**: The actual dotfiles and configuration scripts.
+- **Location**: Files within the `stow/*` directories (e.g., `stow/zsh/.zshrc`).
+- **Contains**: Shell scripts, config files, Vimscript/Lua files.
+- **Depends on**: The applications they configure (e.g., `zsh`, `nvim`).
+- **Used by**: The target applications at runtime.
 
-**Installation & Package Management Layer:**
-- Purpose: Install and manage system packages and tools across platforms
-- Location: `Makefile`, `install/` directory (Brewfile, Caskfile, npmfile, Rustfile, duti, etc.)
-- Contains: Platform-specific package lists, installation orchestration, Homebrew setup
-- Depends on: Detection layer to determine which installer to use
-- Used by: Initial setup, package updates
-
-**Application Configuration Layer:**
-- Purpose: Store application-specific settings distributed via symlinks
-- Location: `config/` directory (git, tmux, alacritty, prettier, thefuck, topgrade)
-- Contains: Actual config files that symlink to `~/.config/` via stow
-- Depends on: Symlink setup (stow)
-- Used by: Applications reading from `~/.config/`
-
-**System Defaults Layer:**
-- Purpose: Apply macOS-specific system and UI defaults
-- Location: `macos/` directory (defaults.sh, defaults-chrome.sh, dock.sh)
-- Contains: macOS system preferences via `defaults write` commands, Dock configuration
-- Depends on: macOS only
-- Used by: `dot macos` and `dot dock` commands
-
-**Command Interface Layer:**
-- Purpose: Provide user-facing CLI for dotfiles operations
-- Location: `bin/dot` shell script with sub-command dispatcher
-- Contains: Command router (help, test, update, macos, dock, edit, clean, duti)
-- Depends on: All other layers
-- Used by: User shell sessions
+**Testing Layer:**
+- **Purpose**: Verifies that the dotfiles are installed correctly and function as expected.
+- **Location**: `test/`
+- **Contains**: Test scripts written in [Bats](https://github.com/bats-core/bats-core).
+- **Depends on**: `bats-core` and the installed dotfiles.
+- **Used by**: The Orchestration Layer (`make test`).
 
 ## Data Flow
 
-**Installation Flow:**
-
-1. **Remote Bootstrap** → `remote-install.sh` detects OS, clones repo to `~/.dotfiles`, invokes appropriate make target
-2. **OS Detection** → Makefile runs detection scripts, sets `OS` variable (macos/linux/wsl)
-3. **System Setup** → Platform-specific `core-*` targets install foundational tools (git, bash, package managers)
-4. **Package Installation** → Multi-stage installation: brew/apt → casks/node/rust → application-specific packages
-5. **Symlink Creation** → Stow creates symlinks: `runcom/` → `~`, `config/` → `~/.config/`
-6. **Completion** → User runs post-install commands (git config, dot macos)
-
-**Shell Initialization Flow:**
-
-1. **Shell Startup** → Bash or Zsh reads `~/.bash_profile` or `~/.zshrc` (symlinked from `runcom/`)
-2. **DOTFILES_DIR Resolution** → Script resolves symlink chain to find actual repo location
-3. **PATH Assembly** → `.path` file builds PATH from system paths, Homebrew, dotfiles/bin
-4. **Non-interactive Return** → If not interactive shell, stop here (no aliases/functions needed)
-5. **Core Utilities Load** → Essential files loaded: `.function`, `.function_*`, `.env`, `.exports`
-6. **Node Version Management** → `.nvm` sourced to enable Node.js version switching
-7. **Interactive Features** → Load shell-specific features: `.alias`, `.prompt` (bash only), `.completion`, `.fzf`
-8. **Platform Features** → Load OS-specific extras (`.env.macos`, `.env.wsl`, `.alias.macos`)
-9. **Color Setup** → Build dircolors cache from `.dir_colors` for faster startup
-10. **Framework Initialization** → Zsh loads Zim framework and initialization
-
-**State Management:**
-
-- **Path state**: Deduplicates `$PATH` to remove duplicates while preserving prepended items
-- **Environment variables**: Centralized in `system/.env*` files, conditionally set per-platform
-- **History state**: Configured through bash/zsh-specific options in `.env`
-- **Shell function state**: Functions live in memory after sourcing; persist across session
-- **Alias state**: Aliases live in memory after sourcing; reset when shell reloads
+**Installation Flow (`make install`):**
+1.  **Platform Detection**: The `Makefile` determines the OS (`Linux`, `macOS`, `WSL`) using `uname`.
+2.  **Dependency Check/Installation**: It checks for and installs dependencies like Homebrew (`brew`), core utilities (`git`, `curl`), and required applications (`stow`, `zsh`, `nvim`, etc.).
+3.  **Stow Execution**: The `stow-packages` target runs the command `stow -R -d stow -t ~ zsh git tmux nvim`.
+4.  **Symlinking**: For each package (e.g., `zsh`), `stow` creates symlinks from the repository (`./stow/zsh/.zshenv`) to the target directory (`~/.zshenv`).
+5.  **Post-Install**: The `set-shell` target attempts to change the user's default shell to `zsh`.
 
 ## Key Abstractions
 
-**Detection Scripts:**
-- Purpose: Encapsulate OS/platform checks as reusable boolean functions
-- Examples: `bin/is-macos`, `bin/is-wsl`, `bin/is-ubuntu`
-- Pattern: Exit with 0 (true) or 1 (false); composable with shell conditionals and Makefile `$(shell ...)`
-
-**Shell Configuration Modules:**
-- Purpose: Group related configuration concerns into single-purpose files
-- Examples: `system/.alias`, `system/.completion`, `system/.function_fs`
-- Pattern: Sourced conditionally based on shell type or interactivity; prefixed with dot for hidden files
-
-**Package Manifests:**
-- Purpose: Declarative lists of packages to install per tool/platform
-- Examples: `install/Brewfile`, `install/npmfile`, `install/Rustfile`
-- Pattern: Simple text files (one package per line or Homebrew formula syntax); processed by respective package managers
-
-**Symlink Configuration:**
-- Purpose: Separate repo structure from home directory structure via symlinks
-- Examples: `runcom/` → `~`, `config/` → `~/.config/`
-- Pattern: Uses GNU Stow; automatically handles conflicts, backups to `.bak` files
-
-**Sub-command Dispatcher:**
-- Purpose: Route user commands to implementation functions
-- Location: `bin/dot`
-- Pattern: `sub_<command>() { ... }` functions; `$1` parsed to determine which function to call
+**Stow Package:**
+- **Purpose**: Represents a logical grouping of configuration for a single application. It's the unit of management.
+- **Examples**: The `git` package in `stow/git/`, the `nvim` package in `stow/nvim/`.
+- **Pattern**: A directory in `stow/` containing files and subdirectories that mirror the desired structure within the `$HOME` directory.
 
 ## Entry Points
 
-**Installation Entry Point:**
-- Location: `remote-install.sh`
-- Triggers: User runs one-line curl/bash command from README
-- Responsibilities: Clone repository, detect OS, execute appropriate Makefile target
-
-**Shell Initialization Entry Point:**
-- Location: `runcom/.bash_profile` (bash) and `runcom/.zshrc` (zsh)
-- Triggers: Shell startup
-- Responsibilities: Resolve DOTFILES_DIR, setup PATH, source configuration modules, initialize prompt/completion
-
-**Makefile Entry Point:**
-- Location: `Makefile`
-- Triggers: `make macos`, `make linux`, `make wsl` from user or remote-install.sh
-- Responsibilities: Orchestrate multi-stage installation, detect platform, manage symlinks
-
-**User Command Entry Point:**
-- Location: `bin/dot`
-- Triggers: User runs `dot <command>` from shell
-- Responsibilities: Route to sub-command implementation, provide help, orchestrate operations
+**`Makefile` Targets:**
+- **Location**: `Makefile`
+- **Triggers**: Invoked by the user running `make <target>`.
+- **Responsibilities**:
+    - `install`: The primary entry point. Installs dependencies and symlinks all configuration packages.
+    - `test`: Runs the Bats test suite to validate the installation.
+    - `unlink`: Removes all symlinks created by `stow`, effectively uninstalling the dotfiles.
 
 ## Error Handling
 
-**Strategy:** Silent failures with fallbacks; exit codes indicate success/failure
-
-**Patterns:**
-
-- **Detection scripts**: Return exit code (0=true/1=false); used with `if script; then` pattern
-- **Installation**: Individual tools may fail but installation continues (`|| true`); later steps may compensate
-- **Path building**: Directory existence checked before adding to PATH (`[ -d $1 ] && ...`)
-- **Command fallbacks**: Multiple methods tried for download (git → curl → wget in `remote-install.sh`)
-- **Locale setup**: Attempts UTF-8, falls back to C.UTF-8, continues without error
-- **DOTFILES_DIR resolution**: Multiple methods tried; returns early if resolved; falls back to heuristics
+**Strategy**: The architecture relies on the underlying shell commands (`stow`, `brew`, `git`) to report errors.
+- **Patterns**: `make` will halt execution if any command in a recipe fails. The `Makefile` also uses constructs like `command -v` to check for the existence of a command before trying to use it. There is no custom in-script error handling.
 
 ## Cross-Cutting Concerns
 
-**Logging:** No centralized logging; operations output to stdout with descriptive messages (echo commands)
+**Platform Support:**
+- **Approach**: The `Makefile` uses `uname -s` and `grep /proc/version` to detect the OS and tailors dependency installation accordingly. Homebrew is used as a unifying package manager across platforms.
+- **Files**: `Makefile`
 
-**Validation:** Implicit via exit codes; explicit checks via `is-executable`, `is-supported` before running tools
-
-**Authentication:** None required; uses public repos and API endpoints; `$GITHUB_TOKEN` optional for grip command
-
-**Secrets/Tokens:** Not handled by core system; users create `system/.exports` file for personal tokens (not tracked)
-
-**Platform Abstraction:** Pervasive; `is-*` scripts encapsulate checks; Makefile uses `$(OS)` variable to dispatch targets
-
-**Performance Optimization:** `dircolors` output cached to `.cache/dircolors.sh`; Zim completion settings configured for fast startup
+**Dependency Management:**
+- **Approach**: Dependencies are managed in two ways: system dependencies via Homebrew (`install-packages` target) and shell/editor plugins via their own managers (e.g., `zsh` uses `zim`).
+- **Files**: `Makefile`, `stow/zsh/.zimrc`
 
 ---
-
-*Architecture analysis: 2026-02-13*
+*Architecture analysis: 2024-07-25*
