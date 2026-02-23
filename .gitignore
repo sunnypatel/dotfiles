@@ -9,5 +9,9 @@ stow/zsh/.config/zsh/.zsh_history
 # Neovim plugin lock file
 stow/nvim/.config/nvim/lazy-lock.json
 
+# Secrets (never commit)
+stow/zsh/.config/zsh/.zsh_secrets
+
 # Temp/scratch
 .tmp/
+*.log

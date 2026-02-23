@@ -27,8 +27,7 @@ Installation includes 8 Homebrew packages: git, neovim, tmux, stow, zsh, fzf, ri
 │   └── nvim/             # Neovim config (~/.config/nvim/)
 ├── test/                 # BATS test suite
 ├── .github/              # CI workflows + Dockerfile
-├── CONTRIBUTING.md       # How to add new tools
-└── REMOVED.md            # What was deleted and why
+└── CONTRIBUTING.md       # How to add new tools
 ```
 
 ## Installation
@@ -157,9 +156,25 @@ Stow creates symlinks from the package directories into `$HOME`. For example:
 
 ## Customization
 
+### Zsh Config Files
+
+All zsh config lives under `stow/zsh/.config/zsh/` (symlinked to `~/.config/zsh/`). Each file has a specific purpose — put things in the right place:
+
+| File | Loaded by | When | Put here |
+|---|---|---|---|
+| `.zshenv` | zsh itself | Every shell (scripts, non-interactive, login) | Bootstrap vars only: `ZDOTDIR`, `EDITOR`, `XDG_*`, `LANG` |
+| `.zsh_path` | `.zshenv` | Every shell | `PATH` entries and `PATH`-related vars (`PNPM_HOME`, etc.) |
+| `.zsh_exports` | `.zshenv` | Every shell | Non-secret tool/app env vars (`OLLAMA_API_KEY`, etc.) |
+| `.zshrc` | zsh itself | Interactive shells only | Shell options, zimfw init, history config |
+| `.zsh_aliases` | `.zshrc` | Interactive shells only | All `alias` definitions |
+| `.zsh_functions` | `.zshrc` | Interactive shells only | Shell functions |
+| `.zsh_secrets` | `.zshrc` | Interactive shells only | Secret tokens and API keys — **gitignored, not in this repo** |
+
+> **`.zsh_secrets`** is not committed. Copy `stow/zsh/.config/zsh/.zsh_secrets.example` to `~/.config/zsh/.zsh_secrets` and fill in your values.
+
 ### Key Files to Edit
 
-- **Shell**: `stow/zsh/.config/zsh/.zshrc` - aliases, functions, shell behavior
+- **Shell**: `stow/zsh/.config/zsh/.zshrc` - shell options and framework init
 - **Git**: `stow/git/.config/git/config` - git aliases and settings
 - **Tmux**: `stow/tmux/.config/tmux/tmux.conf.local` - tmux key bindings and appearance
 - **Neovim**: `stow/nvim/.config/nvim/init.lua` - editor config and plugins

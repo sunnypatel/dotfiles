@@ -27,8 +27,8 @@ fi
 ###############################################################################
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 ###############################################################################
 # pnpm
@@ -45,6 +45,7 @@ typeset -U path
 
 # Build PATH array with priority order (first = highest priority)
 path=(
+  $HOME/.opencode/bin
   $PNPM_HOME
   $HOME/.local/bin
   ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/bin}

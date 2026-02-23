@@ -82,3 +82,20 @@ if [[ "$OSTYPE" == darwin* ]]; then
   alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash/*"
   alias zip="zip -x *.DS_Store -x *__MACOSX* -x *.AppleDouble*"
 fi
+
+#
+# Editor
+#
+alias vim="nvim"
+
+#
+# Anthropic
+#
+alias claude="claude --dangerously-skip-permissions"
+
+#
+# OpenClaw
+#
+alias ocgr="openclaw gateway restart"
+alias oct="openclaw tui"
+alias occ="vim $HOME/.openclaw/openclaw.json"

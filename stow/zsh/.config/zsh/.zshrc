@@ -75,3 +75,9 @@ source "${ZDOTDIR:-$HOME}/.zsh_aliases"
 ###############################################################################
 
 source "${ZDOTDIR:-$HOME}/.zsh_functions"
+
+###############################################################################
+# Secrets (API keys, tokens — not committed to git)
+###############################################################################
+
+[[ -f "${ZDOTDIR:-$HOME}/.zsh_secrets" ]] && source "${ZDOTDIR:-$HOME}/.zsh_secrets"

@@ -1,0 +1,10 @@
+###############################################################################
+# .zsh_exports - Non-Secret Environment Variables
+###############################################################################
+# Sourced by: .zshenv (available to all shells, including scripts)
+# Purpose: Tool configs, app settings, and other non-sensitive exports
+# For secrets (API keys, tokens), use .zsh_secrets instead
+###############################################################################
+
+# Required for OpenClaw to recognize local models
+export OLLAMA_API_KEY="ollama-local"
