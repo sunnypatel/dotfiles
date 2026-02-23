@@ -96,6 +96,8 @@ alias claude="claude --dangerously-skip-permissions"
 #
 # OpenClaw
 #
+alias oc="openclaw"
 alias ocgr="openclaw gateway restart"
 alias oct="openclaw tui"
 alias occ="vim $HOME/.openclaw/openclaw.json"
+alias ocs="openclaw status"
