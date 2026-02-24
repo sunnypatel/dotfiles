@@ -6,22 +6,9 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
-    config = function()
-      require("nvim-treesitter").setup()
-      -- Install parsers if missing (runs async, no-op if already installed)
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "LazyDone",
-        once = true,
-        callback = function()
-          local ensure = { "lua", "javascript", "typescript", "json", "yaml", "markdown", "bash", "vim", "vimdoc" }
-          local installed = require("nvim-treesitter.config").get_installed()
-          local missing = vim.tbl_filter(function(p) return not vim.tbl_contains(installed, p) end, ensure)
-          if #missing > 0 then
-            require("nvim-treesitter.install").install(missing)
-          end
-        end,
-      })
-    end,
+    opts = {
+      ensure_installed = { "lua", "javascript", "typescript", "json", "yaml", "markdown", "bash", "vim", "vimdoc" },
+    },
   },
 
   -- Fuzzy finder
@@ -35,6 +22,18 @@ return {
       { "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
       { "<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Help tags" },
     },
+  },
+
+  -- JSON path display in winbar + copy keymap
+  {
+    "phelipetls/jsonpath.nvim",
+    ft = "json",
+    config = function()
+      require("jsonpath").setup({ show_on_winbar = true })
+      vim.keymap.set("n", "y<C-p>", function()
+        vim.fn.setreg("+", require("jsonpath").get())
+      end, { desc = "Copy JSON path", buffer = true })
+    end,
   },
 
   -- Commenting

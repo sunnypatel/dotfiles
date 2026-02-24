@@ -8,3 +8,4 @@
 
 # Required for OpenClaw to recognize local models
 export OLLAMA_API_KEY="ollama-local"
+
