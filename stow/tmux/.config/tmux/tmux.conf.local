@@ -513,3 +513,12 @@ setw -g window-status-current-format "#[fg=#16161e,bg=#3b4261,nobold,nounderscor
 # tmux-plugins/tmux-prefix-highlight support
 set -g @prefix_highlight_output_prefix "#[fg=#e0af68]#[bg=#16161e]#[fg=#16161e]#[bg=#e0af68]"
 set -g @prefix_highlight_output_suffix ""
+
+# -- custom --------------------------------------------------------------------
+
+# rearrange windows (silently stops at boundaries)
+bind-key -n S-Left  run 'tmux swap-window -d -t #{e|-|:#I,1} 2>/dev/null || true'
+bind-key -n S-Right run 'tmux swap-window -d -t #{e|+|:#I,1} 2>/dev/null || true'
+
+set -s extended-keys on
+set -as terminal-features 'xterm*:extkeys'
