@@ -81,3 +81,6 @@ source "${ZDOTDIR:-$HOME}/.zsh_functions"
 ###############################################################################
 
 [[ -f "${ZDOTDIR:-$HOME}/.zsh_secrets" ]] && source "${ZDOTDIR:-$HOME}/.zsh_secrets"
+
+# bun completions
+[ -s "/home/sunny/.bun/_bun" ] && source "/home/sunny/.bun/_bun"

@@ -64,6 +64,9 @@ vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move to right split" })
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" })
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
 
+-- Clipboard: copy visual selection with Ctrl+Shift+C
+vim.keymap.set("v", "<C-S-c>", '"+y', { desc = "Copy to clipboard" })
+
 -- Formatting
 local function format_json()
   local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)

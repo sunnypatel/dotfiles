@@ -522,3 +522,9 @@ bind-key -n S-Right run 'tmux swap-window -d -t #{e|+|:#I,1} 2>/dev/null || true
 
 set -s extended-keys on
 set -as terminal-features 'xterm*:extkeys'
+
+# This ensures that if you move a window or close one, the entire list shifts to fill or create space naturally.
+set-option -g renumber-windows on
+
+# Press Prefix + M to pull the marked window to your current session/position
+bind-key M move-window -b -s '{marked}' -t .

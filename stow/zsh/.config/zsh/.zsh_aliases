@@ -13,8 +13,6 @@ alias reload="exec zsh"
 alias _="sudo"
 alias g="git"
 alias p="pnpm"
-alias npm="pnpm"
-alias npx="pnpm dlx"
 alias rr="rm -rf"
 alias quit="exit"
 
