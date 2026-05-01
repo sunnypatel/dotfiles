@@ -438,6 +438,7 @@ tmux_conf_uninstall_plugins_on_reload=true
 #set -g @plugin 'tmux-plugins/tmux-cpu'
 set -g @plugin 'tmux-plugins/tmux-resurrect'
 set -g @plugin 'tmux-plugins/tmux-continuum'
+set -g @plugin 'sunnypatel/tmux-window-history'
 set -g @continuum-restore 'on'
 set -g @resurrect-strategy-nvim 'session'
 
