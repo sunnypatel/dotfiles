@@ -23,12 +23,13 @@ elif [[ -d /home/linuxbrew/.linuxbrew ]]; then
 fi
 
 ###############################################################################
-# NVM (Node Version Manager)
+# fnm (Fast Node Manager)
 ###############################################################################
 
-export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+export FNM_PATH="$HOME/.local/share/fnm"
+if [[ -d "$FNM_PATH" ]]; then
+  export PATH="$FNM_PATH:$PATH"
+fi
 
 ###############################################################################
 # pnpm

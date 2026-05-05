@@ -14,3 +14,23 @@ mk() {
 calc() {
   echo "$*" | bc -l
 }
+
+###############################################################################
+# fnm (Fast Node Manager) - Lazy Loading
+###############################################################################
+# Defers fnm init until node/npm/npx/yarn are first called.
+# Without this, `eval "$(fnm env ...)"` runs on every shell start (~50ms).
+###############################################################################
+
+if (( $+commands[fnm] )); then
+  for __fnm_cmd in node npm npx yarn; do
+    eval "
+    $__fnm_cmd() {
+      unset -f node npm npx yarn
+      eval \"\$(fnm env --use-on-cd --shell zsh)\"
+      $__fnm_cmd \"\$@\"
+    }
+    "
+  done
+fi
+unset __fnm_cmd
