@@ -11,7 +11,7 @@ See: .planning/PROJECT.md (updated 2026-02-14)
 
 Milestone: v1.0 Dotfiles Simplification — SHIPPED 2026-02-14
 Status: Milestone Complete
-Last activity: 2026-02-14 — v1.0 milestone archived
+Last activity: 2026-05-05 - Completed quick task 1: Add fnm lazy loading to zsh config and clean up commented-out NVM references
 
 Progress: [██████████] 100%
 
@@ -51,6 +51,7 @@ None.
 
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
+| 1 | Add fnm lazy loading to zsh config and clean up commented-out NVM references | 2026-05-05 | 2f2f7e2 | [1-add-fnm-lazy-loading-to-zsh-config-and-c](./quick/1-add-fnm-lazy-loading-to-zsh-config-and-c/) |
 
 ## Session Continuity
 
