@@ -25,12 +25,12 @@ endif
 BREW := $(or $(shell command -v brew 2>/dev/null),$(BREW_PREFIX)/bin/brew)
 STOW := $(or $(shell command -v stow 2>/dev/null),$(BREW_PREFIX)/bin/stow)
 
-.PHONY: all install macos linux wsl install-deps install-brew install-packages install-nvm install-pnpm stow-packages set-shell post-install unlink test test-setup
+.PHONY: all install macos linux wsl install-deps install-brew install-packages install-fnm install-pnpm stow-packages set-shell post-install unlink test test-setup
 
 all: $(OS)
 install: all
-macos: install-brew install-packages install-nvm install-pnpm stow-packages set-shell post-install
-linux: install-deps install-brew install-packages install-nvm install-pnpm stow-packages set-shell post-install
+macos: install-brew install-packages install-fnm install-pnpm stow-packages set-shell post-install
+linux: install-deps install-brew install-packages install-fnm install-pnpm stow-packages set-shell post-install
 wsl: linux
 
 install-deps:
@@ -49,10 +49,10 @@ install-packages: install-brew
 		pkg=$${entry%%:*}; cmd=$${entry##*:}; \
 		command -v $$cmd >/dev/null 2>&1 || $(BREW) install $$pkg; \
 	done
-install-nvm:
-	@if [ ! -d "$$HOME/.nvm" ]; then \
-		echo "Installing NVM..."; \
-		curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash; \
+install-fnm:
+	@if ! command -v fnm >/dev/null 2>&1; then \
+		echo "Installing fnm..."; \
+		curl -fsSL https://fnm.vercel.app/install | bash -s -- --install-dir "$$HOME/.local/share/fnm" --skip-shell; \
 	fi
 install-pnpm:
 	@if ! command -v pnpm >/dev/null 2>&1; then \
