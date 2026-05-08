@@ -25,7 +25,7 @@ endif
 BREW := $(or $(shell command -v brew 2>/dev/null),$(BREW_PREFIX)/bin/brew)
 STOW := $(or $(shell command -v stow 2>/dev/null),$(BREW_PREFIX)/bin/stow)
 
-.PHONY: all install macos linux wsl install-deps install-brew install-packages install-fnm install-pnpm stow-packages set-shell post-install unlink test test-setup
+.PHONY: all install macos linux wsl install-deps install-brew install-packages install-fnm install-pnpm stow-packages link set-shell post-install unlink test test-setup
 
 all: $(OS)
 install: all
@@ -60,7 +60,8 @@ install-pnpm:
 		curl -fsSL https://get.pnpm.io/install.sh | sh -; \
 	fi
 stow-packages:
-	$(STOW) -R -d $(DOTFILES_DIR)/stow -t $(HOME) zsh git tmux nvim
+	$(STOW) -R -d $(DOTFILES_DIR)/stow -t $(HOME) zsh git tmux nvim alacritty
+link: stow-packages
 set-shell:
 	@ZSH_PATH=$$(command -v zsh); \
 	if [ "$$SHELL" != "$$ZSH_PATH" ]; then \
@@ -76,7 +77,7 @@ post-install:
 	@echo "Log out and back in for zsh to take effect."
 	@echo ""
 unlink:
-	$(STOW) -d $(DOTFILES_DIR)/stow -t $(HOME) -D zsh git tmux nvim
+	$(STOW) -d $(DOTFILES_DIR)/stow -t $(HOME) -D zsh git tmux nvim alacritty
 
 test-setup:
 	@command -v bats >/dev/null 2>&1 || $(BREW) install bats-core
