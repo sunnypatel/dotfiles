@@ -45,7 +45,7 @@ install-brew:
 		curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash; \
 	fi
 install-packages: install-brew
-	@for entry in git neovim:nvim tmux stow zsh fzf ripgrep:rg bat jq; do \
+	@for entry in git neovim:nvim tmux stow zsh fzf ripgrep:rg bat jq aerc pandoc; do \
 		pkg=$${entry%%:*}; cmd=$${entry##*:}; \
 		command -v $$cmd >/dev/null 2>&1 || $(BREW) install $$pkg; \
 	done
@@ -60,7 +60,7 @@ install-pnpm:
 		curl -fsSL https://get.pnpm.io/install.sh | sh -; \
 	fi
 stow-packages:
-	$(STOW) -R -d $(DOTFILES_DIR)/stow -t $(HOME) zsh git tmux nvim alacritty
+	$(STOW) -R -d $(DOTFILES_DIR)/stow -t $(HOME) zsh git tmux nvim alacritty aerc
 link: stow-packages
 set-shell:
 	@ZSH_PATH=$$(command -v zsh); \
@@ -77,7 +77,7 @@ post-install:
 	@echo "Log out and back in for zsh to take effect."
 	@echo ""
 unlink:
-	$(STOW) -d $(DOTFILES_DIR)/stow -t $(HOME) -D zsh git tmux nvim alacritty
+	$(STOW) -d $(DOTFILES_DIR)/stow -t $(HOME) -D zsh git tmux nvim alacritty aerc
 
 test-setup:
 	@command -v bats >/dev/null 2>&1 || $(BREW) install bats-core
