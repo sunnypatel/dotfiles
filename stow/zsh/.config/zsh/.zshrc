@@ -84,3 +84,5 @@ source "${ZDOTDIR:-$HOME}/.zsh_functions"
 
 # bun completions
 [ -s "/home/sunny/.bun/_bun" ] && source "/home/sunny/.bun/_bun"
+
+. "$HOME/.local/share/../bin/env"
