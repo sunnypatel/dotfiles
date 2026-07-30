@@ -22,6 +22,9 @@ else ifeq ($(UNAME_S),Linux)
     endif
     BREW_PREFIX := /home/linuxbrew/.linuxbrew
 endif
+# apt packages required before anything else runs, as pkg:command-to-probe
+LINUX_DEPS := build-essential:gcc curl:curl git:git unzip:unzip
+
 BREW := $(or $(shell command -v brew 2>/dev/null),$(BREW_PREFIX)/bin/brew)
 STOW := $(or $(shell command -v stow 2>/dev/null),$(BREW_PREFIX)/bin/stow)
 
@@ -35,11 +38,17 @@ wsl: linux
 
 install-deps:
 ifeq ($(UNAME_S),Linux)
-	@if ! command -v gcc >/dev/null 2>&1 || ! command -v curl >/dev/null 2>&1 || ! command -v git >/dev/null 2>&1; then \
-		sudo apt-get update && sudo apt-get install -y build-essential curl git; \
+	@missing=""; \
+	for entry in $(LINUX_DEPS); do \
+		pkg=$${entry%%:*}; cmd=$${entry##*:}; \
+		command -v $$cmd >/dev/null 2>&1 || missing="$$missing $$pkg"; \
+	done; \
+	if [ -n "$$missing" ]; then \
+		echo "Installing system dependencies:$$missing"; \
+		sudo apt-get update && sudo apt-get install -y $$missing; \
 	fi
 endif
-install-brew:
+install-brew: install-deps
 	@if ! [ -x $(BREW) ]; then \
 		echo "Installing Homebrew..."; \
 		curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash; \
@@ -49,12 +58,12 @@ install-packages: install-brew
 		pkg=$${entry%%:*}; cmd=$${entry##*:}; \
 		command -v $$cmd >/dev/null 2>&1 || $(BREW) install $$pkg; \
 	done
-install-fnm:
+install-fnm: install-deps
 	@if ! command -v fnm >/dev/null 2>&1; then \
 		echo "Installing fnm..."; \
 		curl -fsSL https://fnm.vercel.app/install | bash -s -- --install-dir "$$HOME/.local/share/fnm" --skip-shell; \
 	fi
-install-pnpm:
+install-pnpm: install-deps
 	@if ! command -v pnpm >/dev/null 2>&1; then \
 		echo "Installing pnpm..."; \
 		curl -fsSL https://get.pnpm.io/install.sh | sh -; \
