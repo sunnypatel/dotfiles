@@ -85,4 +85,5 @@ source "${ZDOTDIR:-$HOME}/.zsh_functions"
 # bun completions
 [ -s "/home/sunny/.bun/_bun" ] && source "/home/sunny/.bun/_bun"
 
-. "$HOME/.local/share/../bin/env"
+# PATH shim written by tool installers (uv, rustup); absent on fresh machines
+[ -s "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
