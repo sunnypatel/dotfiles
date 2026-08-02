@@ -49,6 +49,7 @@ path=(
   $HOME/.opencode/bin
   $PNPM_HOME
   $HOME/.local/bin
+  $HOME/.local/share/fnm/aliases/default/bin
   ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/bin}
   ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/sbin}
   /usr/local/bin

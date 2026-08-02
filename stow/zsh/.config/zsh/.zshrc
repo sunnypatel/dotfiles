@@ -84,3 +84,11 @@ source "${ZDOTDIR:-$HOME}/.zsh_functions"
 
 # bun completions
 [ -s "/home/sunny/.bun/_bun" ] && source "/home/sunny/.bun/_bun"
+
+# pnpm
+export PNPM_HOME="/Users/sunny/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
+esac
+# pnpm end
