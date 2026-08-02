@@ -25,12 +25,12 @@ endif
 BREW := $(or $(shell command -v brew 2>/dev/null),$(BREW_PREFIX)/bin/brew)
 STOW := $(or $(shell command -v stow 2>/dev/null),$(BREW_PREFIX)/bin/stow)
 
-.PHONY: all install macos linux wsl install-deps install-brew install-packages install-fnm install-pnpm stow-packages link set-shell post-install unlink test test-setup
+.PHONY: all install macos linux wsl install-deps install-brew install-packages install-fnm install-pnpm stow-packages link ssh-config set-shell post-install unlink test test-setup
 
 all: $(OS)
 install: all
-macos: install-brew install-packages install-fnm install-pnpm stow-packages set-shell post-install
-linux: install-deps install-brew install-packages install-fnm install-pnpm stow-packages set-shell post-install
+macos: install-brew install-packages install-fnm install-pnpm stow-packages ssh-config set-shell post-install
+linux: install-deps install-brew install-packages install-fnm install-pnpm stow-packages ssh-config set-shell post-install
 wsl: linux
 
 install-deps:
@@ -61,7 +61,9 @@ install-pnpm:
 	fi
 stow-packages:
 	$(STOW) -R -d $(DOTFILES_DIR)/stow -t $(HOME) zsh git tmux nvim alacritty
-link: stow-packages
+link: stow-packages ssh-config
+ssh-config:
+	@$(DOTFILES_DIR)/scripts/gen-ssh-config.sh
 set-shell:
 	@ZSH_PATH=$$(command -v zsh); \
 	if [ "$$SHELL" != "$$ZSH_PATH" ]; then \

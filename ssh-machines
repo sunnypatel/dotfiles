@@ -1,0 +1,4 @@
+# SSH machines, one per line: <alias> <user>@<host>
+# Regenerate ~/.ssh/config from this file with `make ssh-config`.
+titan sunny@100.106.245.48
+thinkbuddy-github-actions-worker-1 sunny@100.73.131.113
