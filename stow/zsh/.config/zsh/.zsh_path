@@ -47,7 +47,7 @@ typeset -U path
 # Build PATH array with priority order (first = highest priority)
 path=(
   $HOME/.opencode/bin
-  $PNPM_HOME
+  $PNPM_HOME/bin
   $HOME/.local/bin
   $HOME/.local/share/fnm/aliases/default/bin
   ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/bin}

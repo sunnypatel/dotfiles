@@ -85,6 +85,9 @@ source "${ZDOTDIR:-$HOME}/.zsh_functions"
 # bun completions
 [ -s "/home/sunny/.bun/_bun" ] && source "/home/sunny/.bun/_bun"
 
+# PATH shim written by tool installers (uv, rustup); absent on fresh machines
+[ -s "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
+
 # pnpm
 export PNPM_HOME="/Users/sunny/.local/share/pnpm"
 case ":$PATH:" in
