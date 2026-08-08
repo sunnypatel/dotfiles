@@ -2,3 +2,10 @@
 # Regenerate ~/.ssh/config from this file with `make ssh-config`.
 titan sunny@100.106.245.48
 thinkbuddy-github-actions-worker-1 sunny@100.73.131.113
+local-thinkbuddy-github-actions-worker-1 sunny@192.168.4.26
+
+caringlist-github-actions-runners sunny@caringlist-github-actions-runners.tail793a8b.ts.net
+caringlist-github-actions-runner-2 sunny@caringlist-github-actions-runners-2.tail793a8b.ts.net
+local-caringlist-github-actions-runners sunny@192.168.4.33
+
+ourwatch-github-actions-runner-1 sunny@ourwatch-github-action-runner-1.tail793a8b.ts.net
