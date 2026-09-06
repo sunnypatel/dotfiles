@@ -15,3 +15,5 @@ stow/zsh/.config/zsh/.zsh_secrets
 # Temp/scratch
 .tmp/
 *.log
+
+.claude/worktrees

@@ -89,9 +89,9 @@ source "${ZDOTDIR:-$HOME}/.zsh_functions"
 [ -s "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 
 # pnpm
-export PNPM_HOME="/Users/sunny/.local/share/pnpm"
+export PNPM_HOME="$HOME/.local/share/pnpm"
 case ":$PATH:" in
-  *":$PNPM_HOME/bin:"*) ;;
-  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
